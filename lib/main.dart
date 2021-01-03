@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'dart:io' show Platform;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: FutureBuilder(
-          // Initialize FlutterFire:
+            // Initialize FlutterFire:
             future: _initialization,
             builder: (context, snapshot) {
               // Check for errors
@@ -67,7 +68,8 @@ class _MyHomePageState extends State<MyHomePage> {
     final data = {
       "date": FieldValue.serverTimestamp(),
       "description": description,
-      "price": total
+      "price": total,
+      "platform": Platform.isAndroid ? "Android" : "IOS"
     };
     currentMonth.doc(category).collection("expenses").doc().set(data);
   }
@@ -93,42 +95,11 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .headline4,
-            ),
-          ],
-        ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: BudgetTable(),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
@@ -137,4 +108,77 @@ class _MyHomePageState extends State<MyHomePage> {
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+}
+
+class BudgetTable extends StatelessWidget {
+  final currentMonth = FirebaseFirestore.instance.collection("january");
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: currentMonth.snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return Text('Something went wrong');
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Text("Loading");
+        }
+
+        return Table(
+          border: TableBorder.all(),
+          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+          children: [
+            TableRow(
+              children: [
+                tableCellHeader("Категория"),
+                tableCellHeader("Лимит"),
+                tableCellHeader("Расстраты")
+              ],
+            ),
+            for (var item in snapshot.data.docs)
+              TableRow(children: [
+                tableCell(item.data()['title']),
+                tableCell(item.data()['limit'].toString()),
+                tableCellClickable(
+                    item.data()['expensesTotal'].toString(), item.id)
+              ])
+          ],
+        );
+      },
+    );
+  }
+
+  Widget tableCellClickable(String data, String id) {
+    return TableCell(
+        child: InkWell(
+      onTap: () => onRowTap(id),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(data),
+      ),
+    ));
+  }
+
+  Widget tableCell(String data) {
+    return TableCell(
+        child: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text(data),
+    ));
+  }
+
+  Widget tableCellHeader(String data) {
+    return TableCell(
+        child: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text(
+        data,
+        style: TextStyle(fontWeight: FontWeight.bold),
+      ),
+    ));
+  }
+
+  onRowTap(String id) {}
 }
