@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: FutureBuilder(
-            // Initialize FlutterFire:
+          // Initialize FlutterFire:
             future: _initialization,
             builder: (context, snapshot) {
               // Check for errors
@@ -52,23 +52,34 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final currentMonth = FirebaseFirestore.instance.collection("january");
 
   void _incrementCounter() {
     setState(() {
       _counter++;
     });
 
-    import();
+    // import();
+    addExpenses(500, "clothes", "Shoes");
+  }
+
+  void addExpenses(int total, String category, String description) {
+    final data = {
+      "date": FieldValue.serverTimestamp(),
+      "description": description,
+      "price": total
+    };
+    currentMonth.doc(category).collection("expenses").doc().set(data);
   }
 
   void import() async {
-    final collection = firestore.collection("january");
-
     var data = await firestore.collection("preset").get();
     data.docs.forEach((element) {
       var data = element.data();
-      data.putIfAbsent("expenses", () => 0);
-      collection.doc(element.id).set(data);
+      data.putIfAbsent("expensesTotal", () => 0);
+      var doc = currentMonth.doc(element.id);
+      doc.collection("expenses");
+      doc.set(data);
     });
   }
 
@@ -111,7 +122,10 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Text(
               '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .headline4,
             ),
           ],
         ),
