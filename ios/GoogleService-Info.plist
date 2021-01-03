@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>118462657113-jmrnm9d7fs8jg8qjn86eu7jn4virt0bp.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.118462657113-jmrnm9d7fs8jg8qjn86eu7jn4virt0bp</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCcFFjIIIo9N0nBfLkkKuCi6Lna_adMaow</string>
+	<key>GCM_SENDER_ID</key>
+	<string>118462657113</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.sirelon.budget</string>
+	<key>PROJECT_ID</key>
+	<string>budget-fc2d0</string>
+	<key>STORAGE_BUCKET</key>
+	<string>budget-fc2d0.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:118462657113:ios:f4117df9ea1ac8e16e3748</string>
+</dict>
+</plist>

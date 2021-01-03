@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "118462657113",
+    "project_id": "budget-fc2d0",
+    "storage_bucket": "budget-fc2d0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:118462657113:android:00a90f9a352c209c6e3748",
+        "android_client_info": {
+          "package_name": "com.sirelon.budget"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "118462657113-io4tssfp7dp6pb6hfcajg8huuif3phq8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5DGKi1IfaG-_i6rkp44a5sXBmc03jKho"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "118462657113-io4tssfp7dp6pb6hfcajg8huuif3phq8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
