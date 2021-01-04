@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: FutureBuilder(
-          // Initialize FlutterFire:
+            // Initialize FlutterFire:
             future: _initialization,
             builder: (context, snapshot) {
               // Check for errors
@@ -64,14 +64,19 @@ class _MyHomePageState extends State<MyHomePage> {
     addExpenses(500, "clothes", "Shoes");
   }
 
-  void addExpenses(int total, String category, String description) {
+  Future<void> addExpenses(
+      int total, String category, String description) async {
     final data = {
       "date": FieldValue.serverTimestamp(),
       "description": description,
       "price": total,
       "platform": Platform.isAndroid ? "Android" : "IOS"
     };
-    currentMonth.doc(category).collection("expenses").doc().set(data);
+    final currentCategory = currentMonth.doc(category);
+    currentCategory.collection("expenses").doc().set(data);
+    final currentDoc = await currentCategory.get();
+    final expensiveTotal = currentDoc.data()['expensesTotal'] + total;
+    currentCategory.update({'expensesTotal': expensiveTotal});
   }
 
   void import() async {
@@ -156,7 +161,8 @@ class BudgetTable extends StatelessWidget {
     }
 
     final limitTotal = limit - expensesTotal;
-    var limitStyle = TextStyle(color: limitTotal > 0 ? Colors.green : Colors.red,
+    var limitStyle = TextStyle(
+        color: limitTotal > 0 ? Colors.green : Colors.red,
         fontWeight: FontWeight.w900);
 
     return TableRow(children: [
@@ -178,12 +184,12 @@ class BudgetTable extends StatelessWidget {
   Widget tableCellClickable(String data, String id) {
     return TableCell(
         child: InkWell(
-          onTap: () => onRowTap(id),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(data),
-          ),
-        ));
+      onTap: () => onRowTap(id),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(data),
+      ),
+    ));
   }
 
   Widget tableCell(String data) {
@@ -197,12 +203,12 @@ class BudgetTable extends StatelessWidget {
   Widget tableCellStyled(String data, TextStyle style) {
     return TableCell(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            data,
-            style: style,
-          ),
-        ));
+      padding: const EdgeInsets.all(8.0),
+      child: Text(
+        data,
+        style: style,
+      ),
+    ));
   }
 
   onRowTap(String id) {}
