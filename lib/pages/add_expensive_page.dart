@@ -1,5 +1,6 @@
 import 'package:budget/network.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AddExpensivePage extends StatefulWidget {
   final String category;
@@ -22,7 +23,7 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
       setState(() {
         selectedCategory = widget.category;
         // if (value.contains(selectedCategory)) {
-          categories = value;
+        categories = value;
         // }
       });
     });
@@ -60,7 +61,44 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
     }
 
     return Scaffold(
-        appBar: AppBar(title: const Text("Add expensive")),
-        body: Center(child: widget));
+        appBar: AppBar(title: const Text("Добавление трат")),
+        body: Center(
+            child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              widget,
+              TextField(
+                decoration:
+                    const InputDecoration(labelText: "Сколько стоит? :)"),
+                keyboardType: TextInputType.number,
+                maxLength: 7,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  FilteringTextInputFormatter.singleLineFormatter
+                ],
+              ),
+              TextField(
+                decoration: const InputDecoration(labelText: "Для нотаток"),
+                keyboardType: TextInputType.multiline,
+                maxLines: 12,
+              ),
+              Spacer(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  FlatButton(child: Text("Охрана, отмена"), onPressed: cancel),
+                  RaisedButton(child: Text("Сохранить"), onPressed: saveExpanse)
+                ],
+              )
+            ],
+          ),
+        )));
+  }
+
+  void saveExpanse() {}
+
+  void cancel() {
+    Navigator.pop(context);
   }
 }
