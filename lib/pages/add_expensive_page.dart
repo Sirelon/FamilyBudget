@@ -13,14 +13,19 @@ class AddExpensivePage extends StatefulWidget {
 class _AddExpensivePageState extends State<AddExpensivePage> {
   String selectedCategory;
 
-  List<String> categories = [];
+  List<String> categories;
 
   @override
   void initState() {
-    selectedCategory = widget.category;
-    DataManager.instance.getCategories().then((value) => setState(() {
+    DataManager.instance.getCategories().then((value) {
+      print(value);
+      setState(() {
+        selectedCategory = widget.category;
+        // if (value.contains(selectedCategory)) {
           categories = value;
-        }));
+        // }
+      });
+    });
     super.initState();
   }
 
@@ -28,7 +33,7 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
   Widget build(BuildContext context) {
     Widget widget;
     if (categories == null) {
-      widget = Spacer();
+      widget = Text("Loading...");
     } else {
       widget = DropdownButton<String>(
         value: selectedCategory,
@@ -56,8 +61,6 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
 
     return Scaffold(
         appBar: AppBar(title: const Text("Add expensive")),
-        body: Center(
-          child: widget,
-        ));
+        body: Center(child: widget));
   }
 }
