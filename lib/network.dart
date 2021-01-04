@@ -46,4 +46,12 @@ class DataManager {
     return currentMonth.get().then((value) =>
         value.docs.map((e) => e.data()["title"].toString()).toList());
   }
+
+  Future<String> getIdByTitle(String title) {
+    return currentMonth
+        .get()
+        .then((value) => value.docs
+            .firstWhere((element) => element.data()['title'] == title))
+        .then((value) => value.id);
+  }
 }

@@ -121,12 +121,10 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
         ));
   }
 
-  void saveExpenses() {
+  void saveExpenses() async {
     if (selectedCategory == null) {
-      _scaffoldKey.currentState.showSnackBar(SnackBar(
-        content: Text("Выбери категорию для начала."),
-        duration: Duration(seconds: 1),
-      ));
+      var errorMsg = "Выбери категорию для начала.";
+      showSnakBar(errorMsg);
       return;
     }
 
@@ -140,7 +138,22 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
       return;
     }
     final description = descriptionController.value.text;
-    DataManager.instance.addExpenses(total, selectedCategory, description);
+    try {
+      final id = await DataManager.instance.getIdByTitle(selectedCategory);
+      DataManager.instance.addExpenses(total, id, description);
+    } catch (e) {
+      print(e);
+      showSnakBar(e.toString());
+    }
+
+    Navigator.pop(context);
+  }
+
+  void showSnakBar(String errorMsg) {
+    _scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text(errorMsg),
+      duration: Duration(seconds: 1),
+    ));
   }
 
   void cancel() {
