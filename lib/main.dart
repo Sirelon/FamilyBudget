@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: FutureBuilder(
-            // Initialize FlutterFire:
+          // Initialize FlutterFire:
             future: _initialization,
             builder: (context, snapshot) {
               // Check for errors
@@ -87,12 +87,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -145,11 +139,32 @@ class BudgetTable extends StatelessWidget {
                 tableCellClickable(
                     item.data()['expensesTotal'].toString(), item.id),
                 balanceCell(item),
-              ])
+              ]),
+            totalRow(snapshot)
           ],
         );
       },
     );
+  }
+
+  TableRow totalRow(AsyncSnapshot<QuerySnapshot> snapshot) {
+    var limit = 0;
+    var expensesTotal = 0;
+    for (var item in snapshot.data.docs) {
+      limit += item.data()['limit'];
+      expensesTotal += item.data()['expensesTotal'];
+    }
+
+    final limitTotal = limit - expensesTotal;
+    var limitStyle = TextStyle(color: limitTotal > 0 ? Colors.green : Colors.red,
+        fontWeight: FontWeight.w900);
+
+    return TableRow(children: [
+      tableCellHeader("Итого"),
+      tableCellHeader(limit.toString()),
+      tableCellHeader(expensesTotal.toString()),
+      tableCellStyled(limitTotal.toString(), limitStyle),
+    ]);
   }
 
   Widget balanceCell(QueryDocumentSnapshot item) {
@@ -163,12 +178,12 @@ class BudgetTable extends StatelessWidget {
   Widget tableCellClickable(String data, String id) {
     return TableCell(
         child: InkWell(
-      onTap: () => onRowTap(id),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(data),
-      ),
-    ));
+          onTap: () => onRowTap(id),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(data),
+          ),
+        ));
   }
 
   Widget tableCell(String data) {
@@ -182,12 +197,12 @@ class BudgetTable extends StatelessWidget {
   Widget tableCellStyled(String data, TextStyle style) {
     return TableCell(
         child: Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Text(
-        data,
-        style: style,
-      ),
-    ));
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            data,
+            style: style,
+          ),
+        ));
   }
 
   onRowTap(String id) {}
