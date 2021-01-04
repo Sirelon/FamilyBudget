@@ -1,6 +1,7 @@
 import 'package:budget/network.dart';
 import 'package:budget/pages/add_expensive_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class BudgetMainPage extends StatelessWidget {
@@ -24,7 +25,7 @@ class BudgetMainPage extends StatelessWidget {
 
   void _goToAddExpenses(BuildContext context) {
     Navigator.push(
-        context, MaterialPageRoute(builder: (c) => AddExpensivePage(null)));
+        context, CupertinoPageRoute(builder: (c) => AddExpensivePage(null)));
   }
 }
 
@@ -135,6 +136,6 @@ class BudgetTable extends StatelessWidget {
 
   onRowTap(BuildContext context, String id) {
     Navigator.push(
-        context, MaterialPageRoute(builder: (c) => AddExpensivePage(id)));
+        context, CupertinoPageRoute(builder: (c) => AddExpensivePage(id)));
   }
 }
