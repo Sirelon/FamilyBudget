@@ -57,10 +57,10 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
         icon: Icon(Icons.arrow_drop_down),
         iconSize: 24,
         elevation: 16,
-        style: TextStyle(color: Colors.green),
+        style: TextStyle(color: Theme.of(context).primaryColor),
         underline: Container(
           height: 2,
-          color: Colors.greenAccent,
+          color: Theme.of(context).accentColor,
         ),
         onChanged: (String newValue) {
           setState(() {
@@ -79,8 +79,7 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
     return Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(title: const Text("Добавление трат")),
-        body: Center(
-            child: Padding(
+        body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
@@ -101,25 +100,28 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
                 ],
               ),
               TextField(
-                controller: descriptionController,
-                decoration: const InputDecoration(labelText: "Для нотаток"),
-                keyboardType: TextInputType.multiline,
-                maxLines: 12,
-              ),
+                  controller: descriptionController,
+                  decoration: const InputDecoration(labelText: "Для нотаток"),
+                  keyboardType: TextInputType.multiline,
+                  minLines: 2,
+                  maxLines: 12),
               Spacer(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  FlatButton(child: Text("Охрана, отмена"), onPressed: cancel),
-                  RaisedButton(child: Text("Сохранить"), onPressed: saveExpanse)
+                  Spacer(flex: 3),
+                  TextButton(child: Text("Охрана, отмена"), onPressed: cancel),
+                  Spacer(flex: 1),
+                  ElevatedButton(
+                      child: Text("Сохранить"), onPressed: saveExpenses)
                 ],
               )
             ],
           ),
-        )));
+        ));
   }
 
-  void saveExpanse() {
+  void saveExpenses() {
     if (selectedCategory == null) {
       _scaffoldKey.currentState.showSnackBar(SnackBar(
         content: Text("Выбери категорию для начала."),
@@ -128,14 +130,17 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
       return;
     }
 
-    final total = costController.text;
-    if (total.isEmpty) {
+    final total = int.tryParse(costController.text);
+
+    if (total == null) {
       setState(() {
         _costFocus.requestFocus();
         _costNotValid = true;
       });
       return;
     }
+    final description = descriptionController.value.text;
+    DataManager.instance.addExpenses(total, selectedCategory, description);
   }
 
   void cancel() {

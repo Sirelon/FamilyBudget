@@ -1,9 +1,9 @@
 import 'package:budget/network.dart';
+import 'package:budget/pages/add_expensive_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class BudgetMainPage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,16 +15,16 @@ class BudgetMainPage extends StatelessWidget {
         child: BudgetTable(),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () => _goToAddExpenses(context),
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 
-  void _incrementCounter() {
-    // import();
-    DataManager.instance.addExpenses(500, "clothes", "Shoes");
+  void _goToAddExpenses(BuildContext context) {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (c) => AddExpensivePage(null)));
   }
 }
 
@@ -61,7 +61,10 @@ class BudgetTable extends StatelessWidget {
                 tableCell(item.data()['title']),
                 tableCell(item.data()['limit'].toString()),
                 tableCellClickable(
-                    item.data()['expensesTotal'].toString(), item.id),
+                  context,
+                  item.data()['expensesTotal'].toString(),
+                  item.data()['title'],
+                ),
                 balanceCell(item),
               ]),
             totalRow(snapshot)
@@ -100,15 +103,15 @@ class BudgetTable extends StatelessWidget {
     return tableCellStyled(data.toString(), style);
   }
 
-  Widget tableCellClickable(String data, String id) {
+  Widget tableCellClickable(BuildContext context, String data, String id) {
     return TableCell(
         child: InkWell(
-          onTap: () => onRowTap(id),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(data),
-          ),
-        ));
+      onTap: () => onRowTap(context, id),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(data),
+      ),
+    ));
   }
 
   Widget tableCell(String data) {
@@ -122,13 +125,16 @@ class BudgetTable extends StatelessWidget {
   Widget tableCellStyled(String data, TextStyle style) {
     return TableCell(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            data,
-            style: style,
-          ),
-        ));
+      padding: const EdgeInsets.all(8.0),
+      child: Text(
+        data,
+        style: style,
+      ),
+    ));
   }
 
-  onRowTap(String id) {}
+  onRowTap(BuildContext context, String id) {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (c) => AddExpensivePage(id)));
+  }
 }
