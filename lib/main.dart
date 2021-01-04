@@ -134,7 +134,8 @@ class BudgetTable extends StatelessWidget {
               children: [
                 tableCellHeader("Категория"),
                 tableCellHeader("Лимит"),
-                tableCellHeader("Расстраты")
+                tableCellHeader("Расстраты"),
+                tableCellHeader("Остаток")
               ],
             ),
             for (var item in snapshot.data.docs)
@@ -142,12 +143,21 @@ class BudgetTable extends StatelessWidget {
                 tableCell(item.data()['title']),
                 tableCell(item.data()['limit'].toString()),
                 tableCellClickable(
-                    item.data()['expensesTotal'].toString(), item.id)
+                    item.data()['expensesTotal'].toString(), item.id),
+                balanceCell(item),
               ])
           ],
         );
       },
     );
+  }
+
+  Widget balanceCell(QueryDocumentSnapshot item) {
+    var limit = item.data()['limit'];
+    var expensesTotal = item.data()['expensesTotal'];
+    var data = limit - expensesTotal;
+    var style = TextStyle(color: data > 0 ? Colors.green : Colors.red);
+    return tableCellStyled(data.toString(), style);
   }
 
   Widget tableCellClickable(String data, String id) {
@@ -162,20 +172,20 @@ class BudgetTable extends StatelessWidget {
   }
 
   Widget tableCell(String data) {
-    return TableCell(
-        child: Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Text(data),
-    ));
+    return tableCellStyled(data, TextStyle(fontWeight: FontWeight.normal));
   }
 
   Widget tableCellHeader(String data) {
+    return tableCellStyled(data, TextStyle(fontWeight: FontWeight.bold));
+  }
+
+  Widget tableCellStyled(String data, TextStyle style) {
     return TableCell(
         child: Padding(
       padding: const EdgeInsets.all(8.0),
       child: Text(
         data,
-        style: TextStyle(fontWeight: FontWeight.bold),
+        style: style,
       ),
     ));
   }
