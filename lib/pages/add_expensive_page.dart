@@ -14,6 +14,8 @@ class AddExpensivePage extends StatefulWidget {
 class _AddExpensivePageState extends State<AddExpensivePage> {
   String selectedCategory;
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   List<String> categories;
 
   final descriptionController = TextEditingController();
@@ -75,6 +77,7 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
     }
 
     return Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(title: const Text("Добавление трат")),
         body: Center(
             child: Padding(
@@ -117,6 +120,14 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
   }
 
   void saveExpanse() {
+    if (selectedCategory == null) {
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text("Выбери категорию для начала."),
+        duration: Duration(seconds: 1),
+      ));
+      return;
+    }
+
     final total = costController.text;
     if (total.isEmpty) {
       setState(() {
