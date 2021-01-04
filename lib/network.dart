@@ -41,4 +41,9 @@ class DataManager {
       doc.set(data);
     });
   }
+
+  Future<List<String>> getCategories() {
+    return currentMonth.get().then((value) =>
+        value.docs.map((e) => e.data()["title"].toString()).toList());
+  }
 }
