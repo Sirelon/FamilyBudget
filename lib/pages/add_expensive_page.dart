@@ -16,8 +16,22 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
 
   List<String> categories;
 
+  final descriptionController = TextEditingController();
+  final costController = TextEditingController();
+  bool _costNotValid = false;
+  FocusNode _costFocus;
+
+  @override
+  void dispose() {
+    _costFocus.dispose();
+    costController.dispose();
+    descriptionController.dispose();
+    super.dispose();
+  }
+
   @override
   void initState() {
+    _costFocus = FocusNode();
     DataManager.instance.getCategories().then((value) {
       print(value);
       setState(() {
@@ -69,8 +83,13 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
             children: [
               widget,
               TextField(
-                decoration:
-                    const InputDecoration(labelText: "Сколько стоит? :)"),
+                focusNode: _costFocus,
+                controller: costController,
+                decoration: InputDecoration(
+                  labelText: "Сколько стоит? :)",
+                  errorText:
+                      _costNotValid ? 'Нужно обязательно указать цену' : null,
+                ),
                 keyboardType: TextInputType.number,
                 maxLength: 7,
                 inputFormatters: [
@@ -79,6 +98,7 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
                 ],
               ),
               TextField(
+                controller: descriptionController,
                 decoration: const InputDecoration(labelText: "Для нотаток"),
                 keyboardType: TextInputType.multiline,
                 maxLines: 12,
@@ -96,7 +116,16 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
         )));
   }
 
-  void saveExpanse() {}
+  void saveExpanse() {
+    final total = costController.text;
+    if (total.isEmpty) {
+      setState(() {
+        _costFocus.requestFocus();
+        _costNotValid = true;
+      });
+      return;
+    }
+  }
 
   void cancel() {
     Navigator.pop(context);
