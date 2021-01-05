@@ -1,6 +1,8 @@
-import 'dart:io' show Platform;
+import 'dart:io' show File, Platform;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path/path.dart';
 
 class DataManager {
   static final DataManager _singleton = DataManager._internal();
@@ -15,6 +17,13 @@ class DataManager {
 
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final currentMonth = FirebaseFirestore.instance.collection("january");
+
+  Future<String> saveImage(File image) async {
+    var path = currentMonth.id + "/" + basename(image.path);
+    await FirebaseStorage.instance.ref(path).putFile(image);
+
+    return FirebaseStorage.instance.ref(path).getDownloadURL();
+  }
 
   Future<void> addExpenses(
       int total, String category, String description) async {

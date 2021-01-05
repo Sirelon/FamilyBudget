@@ -116,7 +116,9 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
                         minLines: 2,
                         maxLines: 12),
                     OutlineButton(child: Text("Фото?"), onPressed: addPhoto),
-                    _image == null ? SizedBox.shrink() : Image.file(_image),
+                    _image == null
+                        ? SizedBox.shrink()
+                        : Image.file(_image, height: 200),
                   ],
                 ),
               ),
@@ -180,6 +182,7 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
+        DataManager.instance.saveImage(_image).then((value) => print(value));
       } else {
         print('No image selected.');
       }
