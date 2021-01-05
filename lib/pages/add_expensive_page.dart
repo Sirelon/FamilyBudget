@@ -204,7 +204,7 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
   }
 
   void showDate(BuildContext context) async {
-    await showDatePicker(
+    date = await showDatePicker(
         context: context,
         initialDate: date,
         firstDate: DateTime(2021),
