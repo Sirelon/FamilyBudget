@@ -47,9 +47,7 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
       print(value);
       setState(() {
         selectedCategory = widget.category;
-        if (value.contains(selectedCategory)) {
-          categories = value;
-        }
+        categories = value;
       });
     });
     super.initState();
