@@ -25,10 +25,10 @@ class DataManager {
     return FirebaseStorage.instance.ref(path).getDownloadURL();
   }
 
-  Future<void> addExpenses(int total, String category, String description,
-      List<String> images) async {
+  Future<void> addExpenses(int total, String category, DateTime dateTime,
+      String description, List<String> images) async {
     final data = {
-      "date": FieldValue.serverTimestamp(),
+      "date": dateTime,
       "description": description,
       "price": total,
       "images": images,

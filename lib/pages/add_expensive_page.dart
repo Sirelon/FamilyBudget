@@ -4,6 +4,7 @@ import 'package:budget/network.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
 class AddExpensivePage extends StatefulWidget {
   final String category;
@@ -28,6 +29,9 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
   File _image;
   final picker = ImagePicker();
 
+  var date = DateTime.now();
+  final dateFormat = DateFormat("yyyy-MM-dd");
+
   @override
   void dispose() {
     _costFocus.dispose();
@@ -43,9 +47,9 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
       print(value);
       setState(() {
         selectedCategory = widget.category;
-        // if (value.contains(selectedCategory)) {
-        categories = value;
-        // }
+        if (value.contains(selectedCategory)) {
+          categories = value;
+        }
       });
     });
     super.initState();
@@ -117,6 +121,9 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
                           minLines: 2,
                           maxLines: 12),
                       OutlineButton(child: Text("Фото?"), onPressed: addPhoto),
+                      OutlineButton(
+                          child: Text(dateFormat.format(date)),
+                          onPressed: () => showDate(context)),
                       _image == null
                           ? SizedBox.shrink()
                           : Image.file(_image, height: 200),
@@ -143,7 +150,7 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
   void saveExpenses() async {
     if (selectedCategory == null) {
       var errorMsg = "Выбери категорию для начала.";
-      showSnakBar(errorMsg);
+      showSnackBar(errorMsg);
       return;
     }
 
@@ -158,23 +165,24 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
     }
     final description = descriptionController.value.text;
     try {
-      final id = await DataManager.instance.getIdByTitle(selectedCategory);
+      var dataManager = DataManager.instance;
+      final id = await dataManager.getIdByTitle(selectedCategory);
 
       List<String> images = [];
       if (_image != null) {
-        final image = await DataManager.instance.saveImage(_image);
+        final image = await dataManager.saveImage(_image);
         images.add(image);
       }
-      DataManager.instance.addExpenses(total, id, description, images);
+      dataManager.addExpenses(total, id, date, description, images);
     } catch (e) {
       print(e);
-      showSnakBar(e.toString());
+      showSnackBar(e.toString());
     }
 
     Navigator.pop(context);
   }
 
-  void showSnakBar(String errorMsg) {
+  void showSnackBar(String errorMsg) {
     _scaffoldKey.currentState.showSnackBar(SnackBar(
       content: Text(errorMsg),
       duration: Duration(seconds: 1),
@@ -195,5 +203,13 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
         print('No image selected.');
       }
     });
+  }
+
+  void showDate(BuildContext context) async {
+    await showDatePicker(
+        context: context,
+        initialDate: date,
+        firstDate: DateTime(2021),
+        lastDate: DateTime.now());
   }
 }
