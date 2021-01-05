@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:budget/network.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddExpensivePage extends StatefulWidget {
   final String category;
@@ -22,6 +25,8 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
   final costController = TextEditingController();
   bool _costNotValid = false;
   FocusNode _costFocus;
+  File _image;
+  final picker = ImagePicker();
 
   @override
   void dispose() {
@@ -105,6 +110,7 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
                   keyboardType: TextInputType.multiline,
                   minLines: 2,
                   maxLines: 12),
+              OutlineButton(child: Text("Фото?"), onPressed: addPhoto),
               Spacer(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -158,5 +164,17 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
 
   void cancel() {
     Navigator.pop(context);
+  }
+
+  void addPhoto() async {
+    final pickedFile = await picker.getImage(source: ImageSource.camera);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        print('No image selected.');
+      }
+    });
   }
 }
