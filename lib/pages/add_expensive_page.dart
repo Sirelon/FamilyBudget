@@ -88,30 +88,38 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              widget,
-              TextField(
-                focusNode: _costFocus,
-                controller: costController,
-                decoration: InputDecoration(
-                  labelText: "Сколько стоит? :)",
-                  errorText:
-                      _costNotValid ? 'Нужно обязательно указать цену' : null,
+              Expanded(
+                child: ListView(
+                  children: [
+                    widget,
+                    TextField(
+                      focusNode: _costFocus,
+                      controller: costController,
+                      decoration: InputDecoration(
+                        labelText: "Сколько стоит? :)",
+                        errorText: _costNotValid
+                            ? 'Нужно обязательно указать цену'
+                            : null,
+                      ),
+                      keyboardType: TextInputType.number,
+                      maxLength: 7,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        FilteringTextInputFormatter.singleLineFormatter
+                      ],
+                    ),
+                    TextField(
+                        controller: descriptionController,
+                        decoration:
+                            const InputDecoration(labelText: "Для нотаток"),
+                        keyboardType: TextInputType.multiline,
+                        minLines: 2,
+                        maxLines: 12),
+                    OutlineButton(child: Text("Фото?"), onPressed: addPhoto),
+                    _image == null ? SizedBox.shrink() : Image.file(_image),
+                  ],
                 ),
-                keyboardType: TextInputType.number,
-                maxLength: 7,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  FilteringTextInputFormatter.singleLineFormatter
-                ],
               ),
-              TextField(
-                  controller: descriptionController,
-                  decoration: const InputDecoration(labelText: "Для нотаток"),
-                  keyboardType: TextInputType.multiline,
-                  minLines: 2,
-                  maxLines: 12),
-              OutlineButton(child: Text("Фото?"), onPressed: addPhoto),
-              Spacer(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
