@@ -156,7 +156,13 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
     final description = descriptionController.value.text;
     try {
       final id = await DataManager.instance.getIdByTitle(selectedCategory);
-      DataManager.instance.addExpenses(total, id, description);
+
+      List<String> images = [];
+      if (_image != null) {
+        final image = await DataManager.instance.saveImage(_image);
+        images.add(image);
+      }
+      DataManager.instance.addExpenses(total, id, description, images);
     } catch (e) {
       print(e);
       showSnakBar(e.toString());
@@ -182,7 +188,6 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
-        DataManager.instance.saveImage(_image).then((value) => print(value));
       } else {
         print('No image selected.');
       }
