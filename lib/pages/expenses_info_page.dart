@@ -67,11 +67,10 @@ class _ExpensesInfoPageState extends State<ExpensesInfoPage> {
   }
 }
 
-// ignore: must_be_immutable
 class ExpensesInfoItem extends StatelessWidget {
-  Expenses expenses;
+  final Expenses expenses;
 
-  ExpensesInfoItem(this.expenses);
+  const ExpensesInfoItem(this.expenses);
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +80,9 @@ class ExpensesInfoItem extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: image != null
+              ? MainAxisAlignment.spaceBetween
+              : MainAxisAlignment.center,
           children: [
             Column(
               children: [
@@ -91,21 +92,24 @@ class ExpensesInfoItem extends StatelessWidget {
               ],
             ),
             image != null
-                ? InkWell(
-                    child: Hero(
-                      tag: image,
-                      child: CachedNetworkImage(
-                        imageUrl: image,
-                        height: 150,
-                      ),
-                    ),
-                    onTap: () =>
-                        _showFullScreenImages(context, expenses.images),
-                  )
+                ? _buildImageWidget(image, context)
                 : SizedBox.shrink()
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildImageWidget(String image, BuildContext context) {
+    return InkWell(
+      child: Hero(
+        tag: image,
+        child: CachedNetworkImage(
+          imageUrl: image,
+          height: 150,
+        ),
+      ),
+      onTap: () => _showFullScreenImages(context, expenses.images),
     );
   }
 
