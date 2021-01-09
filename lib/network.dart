@@ -65,4 +65,24 @@ class DataManager {
             .firstWhere((element) => element.data()['title'] == title))
         .then((value) => value.id);
   }
+
+  Future<List<Expenses>> loadExpenses(String category) {
+    return currentMonth
+        .doc(category)
+        .collection("expenses")
+        .get()
+        .then((value) => value.docs.map((e) {
+              final data = e.data();
+              Timestamp timestamp = data["date"];
+
+              List<dynamic> images = data["images"];
+              return Expenses(
+                  data["price"],
+                  category,
+                  DateTime.fromMillisecondsSinceEpoch(
+                      timestamp.millisecondsSinceEpoch),
+                  data["description"],
+                  images.map((e) => e.toString()).toList());
+            }).toList());
+  }
 }

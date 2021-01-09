@@ -1,6 +1,7 @@
 import 'package:budget/data.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:budget/network.dart';
 import 'package:flutter/material.dart';
+import 'package:budget/utils.dart';
 
 class ExpensesInfoPage extends StatefulWidget {
   final String category;
@@ -12,31 +13,42 @@ class ExpensesInfoPage extends StatefulWidget {
 }
 
 class _ExpensesInfoPageState extends State<ExpensesInfoPage> {
-  String selectedCategory;
+  Future<List<Expenses>> expensesFuture;
 
   @override
   void initState() {
-    selectedCategory = widget.category;
+    final selectedCategory = widget.category;
+    expensesFuture = DataManager.instance.loadExpenses(selectedCategory);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO:
-    var expenses = Expenses(12000, "rent", DateTime.now(), "Оплата за квартиру",
-        ["https://images.unsplash.com/photo-1553524789-59ac0ed1d2d2"]);
+    Widget body = FutureBuilder(
+        future: expensesFuture,
+        builder: (context, snapshot) {
+          // Check for errors
+          if (snapshot.hasError) {
+            return Text("ERROR ${snapshot.error}");
+          }
 
-    final list = List.generate(10, (i) => expenses);
+          // Once complete, show your application
+          if (snapshot.connectionState == ConnectionState.done) {
+            final list = snapshot.data;
+            return ListView.builder(
+                itemCount: list.length,
+                itemBuilder: (BuildContext context, int index) {
+                  Expenses item = list.elementAt(index);
+                  return ExpensesInfoItem(item);
+                });
+          }
 
-    Widget body = ListView.builder(
-        itemCount: list.length,
-        itemBuilder: (BuildContext context, int index) {
-          Expenses item = list.elementAt(index);
-          return ExpensesInfoItem(item);
+          // Otherwise, show something whilst waiting for initialization to complete
+          return CircularProgressIndicator();
         });
 
     return Scaffold(
-      appBar: AppBar(title: Text("Траты категории $selectedCategory")),
+      appBar: AppBar(title: Text("Траты категории")),
       body: SafeArea(
           child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -54,9 +66,11 @@ class ExpensesInfoItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final image = expenses.images.firstOrNull;
+
     return Card(
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Column(
             children: [
@@ -65,13 +79,13 @@ class ExpensesInfoItem extends StatelessWidget {
               Text(expenses.dateTime.toIso8601String())
             ],
           ),
-          SizedBox(
-            child: Image.network(
-              expenses.images.first,
-            ),
-            width: 100,
-            height: 100,
-          )
+          image != null
+              ? Image.network(
+                  image,
+                  width: 100,
+                  height: 100,
+                )
+              : SizedBox.shrink()
         ],
       ),
     );
