@@ -1,4 +1,5 @@
 import 'package:budget/data.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ExpensesInfoPage extends StatefulWidget {
@@ -22,14 +23,14 @@ class _ExpensesInfoPageState extends State<ExpensesInfoPage> {
   @override
   Widget build(BuildContext context) {
     // TODO:
-    var expenses = Expenses(120, "rent", DateTime.now(), "Оплата за квартиру",
+    var expenses = Expenses(12000, "rent", DateTime.now(), "Оплата за квартиру",
         ["https://images.unsplash.com/photo-1553524789-59ac0ed1d2d2"]);
 
     Widget body = ExpensesInfoItem(expenses);
 
     return Scaffold(
       appBar: AppBar(title: Text("Траты категории $selectedCategory")),
-      body: SafeArea(child: body),
+      body: SafeArea(child: Wrap(children: [body])),
     );
   }
 }
@@ -42,6 +43,26 @@ class ExpensesInfoItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Card(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            children: [
+              Text(expenses.total.toString()),
+              Text(expenses.description),
+              Text(expenses.dateTime.toIso8601String())
+            ],
+          ),
+          SizedBox(
+            child: Image.network(
+              expenses.images.first,
+            ),
+            width: 100,
+            height: 100,
+          )
+        ],
+      ),
+    );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:budget/pages/add_expensive_page.dart';
+import 'package:budget/pages/expenses_info_page.dart';
 import 'package:budget/pages/main_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,8 @@ class BudgetApp extends StatelessWidget {
 
               // Once complete, show your application
               if (snapshot.connectionState == ConnectionState.done) {
-                return BudgetMainPage();
+                // return BudgetMainPage();
+                return ExpensesInfoPage("rent");
               }
 
               // Otherwise, show something whilst waiting for initialization to complete
