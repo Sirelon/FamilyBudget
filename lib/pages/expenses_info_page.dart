@@ -3,6 +3,7 @@ import 'package:budget/main.dart';
 import 'package:budget/network.dart';
 import 'package:budget/pages/images_fullscreen_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/utils.dart';
 
@@ -114,7 +115,9 @@ class ExpensesInfoItem extends StatelessWidget {
   }
 
   _showFullScreenImages(BuildContext context, List<String> images) {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (c) => ImagesFullScreenPage(images)));
+    Navigator.push(
+        context,
+        PageRouteBuilder(
+            pageBuilder: (c, a1, a2) => ImagesFullScreenPage(images)));
   }
 }
