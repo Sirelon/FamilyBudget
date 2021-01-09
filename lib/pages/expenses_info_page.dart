@@ -26,11 +26,22 @@ class _ExpensesInfoPageState extends State<ExpensesInfoPage> {
     var expenses = Expenses(12000, "rent", DateTime.now(), "Оплата за квартиру",
         ["https://images.unsplash.com/photo-1553524789-59ac0ed1d2d2"]);
 
-    Widget body = ExpensesInfoItem(expenses);
+    final list = List.generate(10, (i) => expenses);
+
+    Widget body = ListView.builder(
+        itemCount: list.length,
+        itemBuilder: (BuildContext context, int index) {
+          Expenses item = list.elementAt(index);
+          return ExpensesInfoItem(item);
+        });
 
     return Scaffold(
       appBar: AppBar(title: Text("Траты категории $selectedCategory")),
-      body: SafeArea(child: Wrap(children: [body])),
+      body: SafeArea(
+          child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: body,
+      )),
     );
   }
 }
