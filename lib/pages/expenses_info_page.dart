@@ -1,6 +1,7 @@
 import 'package:budget/data.dart';
 import 'package:budget/main.dart';
 import 'package:budget/network.dart';
+import 'package:budget/pages/images_fullscreen_page.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/utils.dart';
 
@@ -89,14 +90,26 @@ class ExpensesInfoItem extends StatelessWidget {
               ],
             ),
             image != null
-                ? Image.network(
-                    image,
-                    width: 150,
+                ? InkWell(
+                    child: Hero(
+                      tag: image,
+                      child: Image.network(
+                        image,
+                        width: 150,
+                      ),
+                    ),
+                    onTap: () =>
+                        _showFullScreenImages(context, expenses.images),
                   )
                 : SizedBox.shrink()
           ],
         ),
       ),
     );
+  }
+
+  _showFullScreenImages(BuildContext context, List<String> images) {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (c) => ImagesFullScreenPage(images)));
   }
 }
