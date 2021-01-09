@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:budget/data.dart';
 import 'package:budget/network.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -171,7 +172,7 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
         final image = await dataManager.saveImage(_image);
         images.add(image);
       }
-      dataManager.addExpenses(total, id, date, description, images);
+      dataManager.addExpenses(Expenses(total, id, date, description, images));
     } catch (e) {
       print(e);
       showSnackBar(e.toString());

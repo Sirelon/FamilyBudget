@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart';
 
+import 'data.dart';
+
 class DataManager {
   static final DataManager _singleton = DataManager._internal();
 
@@ -25,19 +27,18 @@ class DataManager {
     return FirebaseStorage.instance.ref(path).getDownloadURL();
   }
 
-  Future<void> addExpenses(int total, String category, DateTime dateTime,
-      String description, List<String> images) async {
+  Future<void> addExpenses(Expenses expenses) async {
     final data = {
-      "date": dateTime,
-      "description": description,
-      "price": total,
-      "images": images,
+      "date": expenses.dateTime,
+      "description": expenses.description,
+      "price": expenses.total,
+      "images": expenses.images,
       "platform": Platform.isAndroid ? "Android" : "IOS"
     };
-    final currentCategory = currentMonth.doc(category);
+    final currentCategory = currentMonth.doc(expenses.category);
     currentCategory.collection("expenses").doc().set(data);
     final currentDoc = await currentCategory.get();
-    final expensiveTotal = currentDoc.data()['expensesTotal'] + total;
+    final expensiveTotal = currentDoc.data()['expensesTotal'] + expenses.total;
     currentCategory.update({'expensesTotal': expensiveTotal});
   }
 
