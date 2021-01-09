@@ -32,8 +32,7 @@ class BudgetApp extends StatelessWidget {
 
               // Once complete, show your application
               if (snapshot.connectionState == ConnectionState.done) {
-                // return BudgetMainPage();
-                return ExpensesInfoPage("food");
+                return BudgetMainPage();
               }
 
               // Otherwise, show something whilst waiting for initialization to complete

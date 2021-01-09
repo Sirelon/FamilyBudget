@@ -1,5 +1,6 @@
 import 'package:budget/network.dart';
 import 'package:budget/pages/add_expensive_page.dart';
+import 'package:budget/pages/expenses_info_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -59,13 +60,11 @@ class BudgetTable extends StatelessWidget {
             ),
             for (var item in snapshot.data.docs)
               TableRow(children: [
-                tableCell(item.data()['title']),
+                tableCellClickable(item.data()['title'],
+                    () => showExpensesInfo(context, item.data()['title'])),
                 tableCell(item.data()['limit'].toString()),
-                tableCellClickable(
-                  context,
-                  item.data()['expensesTotal'].toString(),
-                  item.data()['title'],
-                ),
+                tableCellClickable(item.data()['expensesTotal'].toString(),
+                    () => openAddExpense(context, item.data()['title'])),
                 balanceCell(item),
               ]),
             totalRow(snapshot)
@@ -104,10 +103,10 @@ class BudgetTable extends StatelessWidget {
     return tableCellStyled(data.toString(), style);
   }
 
-  Widget tableCellClickable(BuildContext context, String data, String id) {
+  Widget tableCellClickable(String data, GestureTapCallback callback) {
     return TableCell(
         child: InkWell(
-      onTap: () => onRowTap(context, id),
+      onTap: callback,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Text(data),
@@ -134,8 +133,13 @@ class BudgetTable extends StatelessWidget {
     ));
   }
 
-  onRowTap(BuildContext context, String id) {
+  openAddExpense(BuildContext context, String id) {
     Navigator.push(
         context, CupertinoPageRoute(builder: (c) => AddExpensivePage(id)));
+  }
+
+  showExpensesInfo(BuildContext context, String id) {
+    Navigator.push(
+        context, CupertinoPageRoute(builder: (c) => ExpensesInfoPage(id)));
   }
 }

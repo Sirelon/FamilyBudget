@@ -18,7 +18,10 @@ class _ExpensesInfoPageState extends State<ExpensesInfoPage> {
   @override
   void initState() {
     final selectedCategory = widget.category;
-    expensesFuture = DataManager.instance.loadExpenses(selectedCategory);
+    final dataManager = DataManager.instance;
+    expensesFuture = dataManager
+        .getIdByTitle(selectedCategory)
+        .then((value) => dataManager.loadExpenses(value));
     super.initState();
   }
 
@@ -48,7 +51,7 @@ class _ExpensesInfoPageState extends State<ExpensesInfoPage> {
         });
 
     return Scaffold(
-      appBar: AppBar(title: Text("Траты категории")),
+      appBar: AppBar(title: Text("Траты категории ${widget.category}")),
       body: SafeArea(
           child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -82,8 +85,7 @@ class ExpensesInfoItem extends StatelessWidget {
           image != null
               ? Image.network(
                   image,
-                  width: 100,
-                  height: 100,
+                  height: 150,
                 )
               : SizedBox.shrink()
         ],
