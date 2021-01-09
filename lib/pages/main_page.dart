@@ -1,4 +1,4 @@
-import 'package:budget/network.dart';
+import 'package:budget/main.dart';
 import 'package:budget/pages/add_expensive_page.dart';
 import 'package:budget/pages/expenses_info_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -16,17 +16,8 @@ class BudgetMainPage extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: BudgetTable(),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _goToAddExpenses(context),
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      floatingActionButton: AddExpensiveFAB(category: null),
     );
-  }
-
-  void _goToAddExpenses(BuildContext context) {
-    Navigator.push(
-        context, CupertinoPageRoute(builder: (c) => AddExpensivePage(null)));
   }
 }
 

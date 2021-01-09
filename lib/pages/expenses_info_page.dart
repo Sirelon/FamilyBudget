@@ -1,4 +1,5 @@
 import 'package:budget/data.dart';
+import 'package:budget/main.dart';
 import 'package:budget/network.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/utils.dart';
@@ -27,6 +28,8 @@ class _ExpensesInfoPageState extends State<ExpensesInfoPage> {
 
   @override
   Widget build(BuildContext context) {
+    final category = widget.category;
+
     Widget body = FutureBuilder(
         future: expensesFuture,
         builder: (context, snapshot) {
@@ -51,12 +54,13 @@ class _ExpensesInfoPageState extends State<ExpensesInfoPage> {
         });
 
     return Scaffold(
-      appBar: AppBar(title: Text("Траты категории ${widget.category}")),
+      appBar: AppBar(title: Text("Траты категории $category")),
       body: SafeArea(
           child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: body,
       )),
+      floatingActionButton: AddExpensiveFAB(category: category),
     );
   }
 }
@@ -72,23 +76,26 @@ class ExpensesInfoItem extends StatelessWidget {
     final image = expenses.images.firstOrNull;
 
     return Card(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Column(
-            children: [
-              Text(expenses.total.toString()),
-              Text(expenses.description),
-              Text(expenses.dateTime.toIso8601String())
-            ],
-          ),
-          image != null
-              ? Image.network(
-                  image,
-                  height: 150,
-                )
-              : SizedBox.shrink()
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              children: [
+                Text(expenses.total.toString()),
+                Text(expenses.description),
+                Text(expenses.dateTime.toIso8601String())
+              ],
+            ),
+            image != null
+                ? Image.network(
+                    image,
+                    width: 150,
+                  )
+                : SizedBox.shrink()
+          ],
+        ),
       ),
     );
   }
