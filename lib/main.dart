@@ -16,11 +16,15 @@ class BudgetApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
+    TextTheme textTheme = TextTheme(headline6: TextStyle(color: Colors.black));
+
     return MaterialApp(
         title: 'Family Budget',
         theme: ThemeData(
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
+          textTheme: textTheme
         ),
         home: FutureBuilder(
             // Initialize FlutterFire:

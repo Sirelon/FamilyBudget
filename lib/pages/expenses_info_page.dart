@@ -77,23 +77,38 @@ class ExpensesInfoItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final image = expenses.images.firstOrNull;
 
+    ThemeData theme = Theme.of(context);
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(
-          mainAxisAlignment: image != null
-              ? MainAxisAlignment.spaceBetween
-              : MainAxisAlignment.center,
           children: [
-            Column(
-              children: [
-                Text(expenses.total.toString()),
-                Text(expenses.description),
-                Text(expenses.dateTime.toIso8601String())
-              ],
+            Expanded(
+              flex: 3,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Text(
+                      expenses.total.toString(),
+                      style: theme.textTheme.headline6,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    expenses.description,
+                    style: theme.textTheme.bodyText2,
+                  ),
+                  Text(
+                    expenses.dateTime.toIso8601String(),
+                    style: theme.textTheme.caption,
+                  )
+                ],
+              ),
             ),
             image != null
-                ? _buildImageWidget(image, context)
+                ? Expanded(child: _buildImageWidget(image, context), flex: 1,)
                 : SizedBox.shrink()
           ],
         ),
