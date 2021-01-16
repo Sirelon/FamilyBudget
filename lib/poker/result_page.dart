@@ -2,6 +2,8 @@ import 'package:budget/poker/cards_list_page.dart';
 import 'package:budget/poker/ripple_animation.dart';
 import 'package:flutter/material.dart';
 
+import 'fibonnacci_card_widget.dart';
+
 class CardFullPage extends StatefulWidget {
   final int number;
 
@@ -27,7 +29,10 @@ class _CardFullPageState extends State<CardFullPage> {
             width: double.infinity,
             height: double.infinity,
             color: Colors.deepOrangeAccent,
-            child: Center(child: RipplesAnimation()),
+            child: Center(
+                child: RipplesAnimation(
+              child: Container(),
+            )),
           );
     final titleText = toReveal ? "Tap to close" : "Ready. Tap to view.";
     return Scaffold(
