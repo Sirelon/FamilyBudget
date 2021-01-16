@@ -1,3 +1,4 @@
+import 'package:budget/poker/ripple_animation.dart';
 import 'package:flutter/material.dart';
 
 class CardsListPage extends StatelessWidget {
@@ -93,31 +94,24 @@ class _CardFullPageState extends State<CardFullPage> {
             height: double.infinity,
             color: Colors.deepOrangeAccent,
             child: Center(
-                child: Text("Tap to reveal",
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline2
-                        .apply(color: Colors.white))),
+                child: RipplesAnimation()),
           );
     final titleText = toReveal ? "Tap to close" : "Ready. Tap to view.";
     return Scaffold(
       appBar: AppBar(title: Text(titleText)),
       body: SafeArea(
-          child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: InkWell(
-          child: body,
-          onTap: () {
-            if (toReveal) {
-              Navigator.pop(context);
-            } else {
-              setState(() {
-                toReveal = true;
-              });
-            }
-          },
-        ),
-      )),
+          child: InkWell(
+            child: body,
+            onTap: () {
+              if (toReveal) {
+                Navigator.pop(context);
+              } else {
+                setState(() {
+                  toReveal = true;
+                });
+              }
+            },
+          )),
     );
   }
 }
