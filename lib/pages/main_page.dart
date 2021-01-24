@@ -40,6 +40,12 @@ class BudgetTable extends StatelessWidget {
         return Table(
           border: TableBorder.all(),
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+          columnWidths: {
+            0: FlexColumnWidth(1.6),
+            1: FlexColumnWidth(1.0),
+            2: FlexColumnWidth(1.0),
+            3: FlexColumnWidth(1.0),
+          },
           children: [
             TableRow(
               children: [
@@ -51,11 +57,11 @@ class BudgetTable extends StatelessWidget {
             ),
             for (var item in snapshot.data.docs)
               TableRow(children: [
-                tableCellClickable(item.data()['title'],
+                tableCellClickable(item.data()['title'], true,
                     () => showExpensesInfo(context, item.data()['title'])),
                 tableCell(item.data()['limit'].toString()),
                 tableCellClickable(item.data()['expensesTotal'].toString(),
-                    () => openAddExpense(context, item.data()['title'])),
+                    false, () => openAddExpense(context, item.data()['title'])),
                 balanceCell(item),
               ]),
             totalRow(snapshot)
@@ -94,13 +100,23 @@ class BudgetTable extends StatelessWidget {
     return tableCellStyled(data.toString(), style);
   }
 
-  Widget tableCellClickable(String data, GestureTapCallback callback) {
+  Widget tableCellClickable(
+      String data, bool bigtext, GestureTapCallback callback) {
+    var fontsize;
+    if (bigtext == true) {
+      fontsize = 18.0;
+    } else {
+      fontsize = 14.0;
+    }
     return TableCell(
         child: InkWell(
       onTap: callback,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Text(data),
+        child: Text(
+          data,
+          style: TextStyle(fontSize: fontsize),
+        ),
       ),
     ));
   }
@@ -110,7 +126,7 @@ class BudgetTable extends StatelessWidget {
   }
 
   Widget tableCellHeader(String data) {
-    return tableCellStyled(data, TextStyle(fontWeight: FontWeight.bold));
+    return tableCellStyled(data, TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
   }
 
   Widget tableCellStyled(String data, TextStyle style) {
