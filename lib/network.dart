@@ -70,6 +70,7 @@ class DataManager {
     return currentMonth
         .doc(category)
         .collection("expenses")
+        .orderBy("date", descending: true)
         .get()
         .then((value) => value.docs.map((e) {
               final data = e.data();

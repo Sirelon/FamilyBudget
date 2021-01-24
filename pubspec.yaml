@@ -35,7 +35,7 @@ dependencies:
   path: ^1.7.0
   intl: ^0.16.1
   cached_network_image: ^2.5.0
-  provider: ^4.3.2+4
+  provider: ^4.3.3
 
 
 dev_dependencies:
