@@ -51,7 +51,7 @@ class BudgetTable extends StatelessWidget {
               children: [
                 tableCellHeader("Категория"),
                 tableCellHeader("Лимит"),
-                tableCellHeader("Расстраты"),
+                tableCellHeader("Shopping"),
                 tableCellHeader("Остаток")
               ],
             ),
