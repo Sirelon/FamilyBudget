@@ -1,10 +1,13 @@
+import 'package:budget/network.dart';
 import 'package:budget/pages/add_expensive_page.dart';
 import 'package:budget/pages/expenses_info_page.dart';
 import 'package:budget/pages/main_page.dart';
+import 'package:budget/poker/Poker.dart';
 import 'package:budget/poker/cards_list_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,34 +20,35 @@ class BudgetApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
     TextTheme textTheme = TextTheme(headline6: TextStyle(color: Colors.black));
 
-    return MaterialApp(
-        title: 'Family Budget',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-          textTheme: textTheme
-        ),
-        home: FutureBuilder(
-            // Initialize FlutterFire:
-            future: _initialization,
-            builder: (context, snapshot) {
-              // Check for errors
-              if (snapshot.hasError) {
-                return Text("ERROR ${snapshot.error}");
-              }
+    return MultiProvider(
+      providers: [ChangeNotifierProvider.value(value: Poker())],
+      child: MaterialApp(
+          title: 'Family Budget',
+          theme: ThemeData(
+              primarySwatch: Colors.blue,
+              visualDensity: VisualDensity.adaptivePlatformDensity,
+              textTheme: textTheme),
+          home: FutureBuilder(
+              // Initialize FlutterFire:
+              future: _initialization,
+              builder: (context, snapshot) {
+                // Check for errors
+                if (snapshot.hasError) {
+                  return Text("ERROR ${snapshot.error}");
+                }
 
-              // Once complete, show your application
-              if (snapshot.connectionState == ConnectionState.done) {
-                return BudgetMainPage();
-                // return CardsListPage();
-              }
+                // Once complete, show your application
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return BudgetMainPage();
+                  // return CardsListPage();
+                }
 
-              // Otherwise, show something whilst waiting for initialization to complete
-              return CircularProgressIndicator();
-            }));
+                // Otherwise, show something whilst waiting for initialization to complete
+                return CircularProgressIndicator();
+              })),
+    );
   }
 }
 
@@ -63,6 +67,7 @@ class AddExpensiveFAB extends StatelessWidget {
   }
 
   void _goToAddExpenses(BuildContext context) {
+    // DataManager.instance.import();
     Navigator.push(context,
         CupertinoPageRoute(builder: (c) => AddExpensivePage(category)));
   }

@@ -67,7 +67,7 @@ class _ConnectButtonWidgetState extends State<ConnectButtonWidget> {
           Text("You're connected to $room"),
           RaisedButton(
             onPressed: _showDialog,
-            child: Text("Reconect"),
+            child: Text("Reconnect"),
           )
         ],
       ));
@@ -108,6 +108,8 @@ class _ConnectButtonWidgetState extends State<ConnectButtonWidget> {
 
   _connectToRoom() {
     Navigator.pop(context);
-    setState(() {});
+    setState(() {
+
+    });
   }
 }

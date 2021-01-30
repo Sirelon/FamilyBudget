@@ -1,4 +1,5 @@
 import 'package:budget/main.dart';
+import 'package:budget/network.dart';
 import 'package:budget/pages/add_expensive_page.dart';
 import 'package:budget/pages/expenses_info_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -22,12 +23,11 @@ class BudgetMainPage extends StatelessWidget {
 }
 
 class BudgetTable extends StatelessWidget {
-  final currentMonth = FirebaseFirestore.instance.collection("january");
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: currentMonth.snapshots(),
+      stream: DataManager.instance.currentMonth.snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
           return Text('Something went wrong');
