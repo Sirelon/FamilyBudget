@@ -1,4 +1,3 @@
-import 'package:budget/poker/cards_list_page.dart';
 import 'package:budget/poker/ripple_animation.dart';
 import 'package:flutter/material.dart';
 

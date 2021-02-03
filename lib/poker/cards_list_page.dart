@@ -1,8 +1,10 @@
+import 'package:budget/poker/Poker.dart';
 import 'package:budget/poker/fibonnacci_card_widget.dart';
 import 'package:budget/poker/result_page.dart';
 import 'package:budget/poker/ripple_animation.dart';
 import 'package:budget/ui_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CardsListPage extends StatelessWidget {
   @override
@@ -109,7 +111,7 @@ class _ConnectButtonWidgetState extends State<ConnectButtonWidget> {
   _connectToRoom() {
     Navigator.pop(context);
     setState(() {
-
+      Provider.of<Poker>(context, listen: false).connectToRoom(controller.text);
     });
   }
 }
