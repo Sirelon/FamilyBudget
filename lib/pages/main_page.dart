@@ -30,7 +30,7 @@ class BudgetTable extends StatelessWidget {
       stream: DataManager.instance.currentMonth.snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
-          return Text('Something went wrong');
+          return Text('Something went wrong ${snapshot.error}');
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
