@@ -14,10 +14,14 @@ void main() {
   runApp(BudgetApp());
 }
 
-class BudgetApp extends StatelessWidget {
+class BudgetApp extends StatefulWidget {
+  @override
+  _BudgetAppState createState() => _BudgetAppState();
+}
+
+class _BudgetAppState extends State<BudgetApp> with WidgetsBindingObserver {
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = TextTheme(headline6: TextStyle(color: Colors.black));
@@ -41,14 +45,34 @@ class BudgetApp extends StatelessWidget {
 
                 // Once complete, show your application
                 if (snapshot.connectionState == ConnectionState.done) {
-                  return BudgetMainPage();
-                  // return CardsListPage();
+                  // return BudgetMainPage();
+                  return CardsListPage();
                 }
 
                 // Otherwise, show something whilst waiting for initialization to complete
                 return CircularProgressIndicator();
               })),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    var resumed = state == AppLifecycleState.resumed;
+    // TODO: I'm not ready to handle app state yet.
+    // Provider.of<Poker>(context, listen: false)
+    //     .connectionChanged(resumed);
   }
 }
 

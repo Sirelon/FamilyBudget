@@ -66,7 +66,7 @@ class _ConnectButtonWidgetState extends State<ConnectButtonWidget> {
       return Center(
           child: Column(
         children: [
-          Text("You're connected to $room"),
+          ..._buildInfoWidget(room),
           RaisedButton(
             onPressed: _showDialog,
             child: Text("Reconnect"),
@@ -74,6 +74,15 @@ class _ConnectButtonWidgetState extends State<ConnectButtonWidget> {
         ],
       ));
     }
+  }
+
+  List<Text> _buildInfoWidget(String room) {
+    final poker = Provider.of<Poker>(context, listen: false);
+
+    return [
+      Text("You're connected to $room"),
+      Text("Current round is: ${poker.currentRound}")
+    ];
   }
 
   _showDialog() async {
