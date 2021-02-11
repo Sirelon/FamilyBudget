@@ -134,6 +134,10 @@ class Poker extends ChangeNotifier {
 
   DocumentReference _currentRoundDoc() => _roomCollection.doc(_info.roundDoc);
 
+  void goToNextRound(int round) {
+    _roomCollection.doc("info").update({"round": round + 1});
+  }
+
 // void unlock() {
 //   _roomCollection.doc("Round $_currentRound").update({
 //     _userName: {"number": fibNumber, "lock": true}

@@ -40,11 +40,13 @@ class _CardFullPageState extends State<CardFullPage> {
           child: InkWell(
         child: body,
         onTap: () {
+          var poker = Provider.of<Poker>(context, listen: false);
           if (toReveal) {
+            poker.goToNextRound(poker.currentInfo.round);
             Navigator.pop(context);
           } else {
-            Provider.of<Poker>(context, listen: false)
-                .onCardReveal(widget.number);
+
+            poker.onCardReveal(widget.number);
 
             setState(() {
               toReveal = true;
