@@ -20,9 +20,9 @@ class RoomInfo {
 
 class RoundResult {
   final int round;
-  List<UserResultHolder> users = [];
+  final List<UserResultHolder> users;
 
-  RoundResult(this.round);
+  RoundResult(this.round, this.users);
 
   bool get canReveal => users.every((element) => !element.lock);
 
@@ -52,6 +52,10 @@ class Poker extends ChangeNotifier {
 
   RoomInfo get currentInfo => _info;
 
+  RoundResult _roundResult;
+
+  RoundResult get roundResult => _roundResult;
+
   Poker() {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
 
@@ -76,6 +80,24 @@ class Poker extends ChangeNotifier {
         prefilInfo();
       }
       _info = RoomInfo(roomName, round);
+
+      connectToRound();
+
+      notifyListeners();
+    });
+  }
+
+  void connectToRound() {
+    _currentRoundDoc().snapshots().listen((event) {
+      final data = event.data();
+
+      final users =
+          data.entries.where((element) => element.value != null).map((e) {
+        final userData = e.value;
+        return UserResultHolder(e.key, userData["number"], userData["lock"]);
+      }).toList();
+
+      _roundResult = RoundResult(_info.round, users);
       notifyListeners();
     });
   }
@@ -95,9 +117,9 @@ class Poker extends ChangeNotifier {
   void onCardChoosed(int index) {
     final fibNumber = fibonacci(index);
     // _roomCollection.doc("Round $_currentRound").get().then((value) => value.)
-    _currentRoundDoc().update({
+    _currentRoundDoc().set({
       _userName: {"number": fibNumber, "lock": true}
-    });
+    }, SetOptions(merge: true));
   }
 
   void onCardReveal(int fibonacci) {

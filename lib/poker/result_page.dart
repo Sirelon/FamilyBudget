@@ -22,29 +22,29 @@ class _CardFullPageState extends State<CardFullPage> {
   Widget build(BuildContext context) {
     final body = toReveal
         ? FibonacciCardWidget(
-            number: widget.number,
-            big: true,
-          )
+      number: widget.number,
+      big: true,
+    )
         : WaitForResultWidget();
     final titleText = toReveal ? "Tap to close" : "Ready. Tap to view.";
     return Scaffold(
       appBar: AppBar(title: Text(titleText)),
       body: SafeArea(
           child: InkWell(
-        child: body,
-        onTap: () {
-          if (toReveal) {
-            Navigator.pop(context);
-          } else {
-            Provider.of<Poker>(context, listen: false)
-                .onCardReveal(widget.number);
+            child: body,
+            onTap: () {
+              if (toReveal) {
+                Navigator.pop(context);
+              } else {
+                Provider.of<Poker>(context, listen: false)
+                    .onCardReveal(widget.number);
 
-            setState(() {
-              toReveal = true;
-            });
-          }
-        },
-      )),
+                setState(() {
+                  toReveal = true;
+                });
+              }
+            },
+          )),
     );
   }
 }
@@ -62,10 +62,11 @@ class WaitForResultWidget extends StatelessWidget {
       color: Colors.deepOrangeAccent,
       child: Center(
           child: Column(
-        children: [
-          RipplesAnimation(child: Container()),
-        ],
-      )),
+            children: [
+              RipplesAnimation(child: Container()),
+              RoundResultsWidget(),
+            ],
+          )),
     );
   }
 }
@@ -74,7 +75,30 @@ class RoundResultsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<Poker>(builder: (context, poker, child) {
+      final data = poker.roundResult;
+      if (data == null) return Container();
+      final usersInfo = data.users.map((e) => _userInfo(e));
 
+      var title = "Wait for all";
+      if (data.canReveal) {
+        title = "RESULT IS ${data.result}";
+      }
+      return Column(children: [
+        Text(title, style: TextStyle(fontSize: 18, color: Colors.limeAccent)),
+        ...usersInfo,
+      ]);
     });
+  }
+
+  Widget _userInfo(UserResultHolder user) {
+    var valueTxt = user.value.toString();
+    if (user.lock) {
+      valueTxt = "Ready";
+    }
+
+    return Row(children: [
+      Text(user.userName, style: TextStyle(fontSize: 14),),
+      Text(valueTxt, style: TextStyle(color: Colors.cyan))
+    ]);
   }
 }
