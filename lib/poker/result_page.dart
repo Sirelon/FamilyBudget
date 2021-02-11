@@ -21,30 +21,37 @@ class _CardFullPageState extends State<CardFullPage> {
   @override
   Widget build(BuildContext context) {
     final body = toReveal
-        ? FibonacciCardWidget(
-      number: widget.number,
-      big: true,
-    )
+        ? Column(
+            children: [
+              Expanded(
+                child: FibonacciCardWidget(
+                  number: widget.number,
+                  big: true,
+                ),
+              ),
+              RoundResultsWidget()
+            ],
+          )
         : WaitForResultWidget();
     final titleText = toReveal ? "Tap to close" : "Ready. Tap to view.";
     return Scaffold(
       appBar: AppBar(title: Text(titleText)),
       body: SafeArea(
           child: InkWell(
-            child: body,
-            onTap: () {
-              if (toReveal) {
-                Navigator.pop(context);
-              } else {
-                Provider.of<Poker>(context, listen: false)
-                    .onCardReveal(widget.number);
+        child: body,
+        onTap: () {
+          if (toReveal) {
+            Navigator.pop(context);
+          } else {
+            Provider.of<Poker>(context, listen: false)
+                .onCardReveal(widget.number);
 
-                setState(() {
-                  toReveal = true;
-                });
-              }
-            },
-          )),
+            setState(() {
+              toReveal = true;
+            });
+          }
+        },
+      )),
     );
   }
 }
@@ -62,11 +69,11 @@ class WaitForResultWidget extends StatelessWidget {
       color: Colors.deepOrangeAccent,
       child: Center(
           child: Column(
-            children: [
-              RipplesAnimation(child: Container()),
-              RoundResultsWidget(),
-            ],
-          )),
+        children: [
+          RipplesAnimation(child: Container()),
+          RoundResultsWidget(),
+        ],
+      )),
     );
   }
 }
@@ -77,28 +84,35 @@ class RoundResultsWidget extends StatelessWidget {
     return Consumer<Poker>(builder: (context, poker, child) {
       final data = poker.roundResult;
       if (data == null) return Container();
-      final usersInfo = data.users.map((e) => _userInfo(e));
+      final usersInfo = data.users.map((e) => _userInfo(data.canReveal, e));
 
       var title = "Wait for all";
       if (data.canReveal) {
         title = "RESULT IS ${data.result}";
       }
       return Column(children: [
-        Text(title, style: TextStyle(fontSize: 18, color: Colors.limeAccent)),
+        Text(title, style: TextStyle(fontSize: 18)),
         ...usersInfo,
       ]);
     });
   }
 
-  Widget _userInfo(UserResultHolder user) {
+  Widget _userInfo(bool canReveal, UserResultHolder user) {
     var valueTxt = user.value.toString();
-    if (user.lock) {
+    if (!canReveal) {
       valueTxt = "Ready";
     }
 
-    return Row(children: [
-      Text(user.userName, style: TextStyle(fontSize: 14),),
-      Text(valueTxt, style: TextStyle(color: Colors.cyan))
-    ]);
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Row(children: [
+        Text(
+          user.userName,
+          style: TextStyle(fontSize: 14),
+        ),
+        SizedBox(width: 16),
+        Text(valueTxt, style: TextStyle(color: Colors.cyan))
+      ]),
+    );
   }
 }
