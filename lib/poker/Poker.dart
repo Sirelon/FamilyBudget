@@ -9,6 +9,13 @@ import 'dart:io' show Platform;
 
 import 'cards_list_page.dart';
 
+class RoomInfo {
+  String name;
+  int round;
+
+  RoomInfo(this.name, this.round);
+}
+
 class Poker extends ChangeNotifier {
   String _userName;
 
@@ -17,6 +24,10 @@ class Poker extends ChangeNotifier {
   var _currentRound = 1;
 
   int get currentRound => _currentRound;
+
+  RoomInfo _info = null;
+
+  RoomInfo get currentInfo => _info;
 
   Poker() {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
@@ -40,10 +51,10 @@ class Poker extends ChangeNotifier {
       } else {
         prefilInfo();
       }
+      _info = RoomInfo(roomName, _currentRound);
+      notifyListeners();
     });
   }
-
-  String getRoomName() => _roomCollection?.id;
 
   void connectionChanged(bool conected) {
     if (conected) {
@@ -59,7 +70,6 @@ class Poker extends ChangeNotifier {
 
   void readInfo(DocumentSnapshot event) {
     _currentRound = event.data()["round"];
-    notifyListeners();
   }
 
   void onCardChoosed(int index) {

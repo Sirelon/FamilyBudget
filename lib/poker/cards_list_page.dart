@@ -58,32 +58,32 @@ class _ConnectButtonWidgetState extends State<ConnectButtonWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final room = controller.value.text;
-    if (room == null || room.isEmpty) {
-      return RaisedButton(
-        onPressed: _showDialog,
-        child: Text("Connect to room"),
-      );
-    } else {
-      return Center(
-          child: Column(
-        children: [
-          ..._buildInfoWidget(room),
-          RaisedButton(
-            onPressed: _showDialog,
-            child: Text("Reconnect"),
-          )
-        ],
-      ));
-    }
+    return Consumer<Poker>(builder: (context, poker, child) {
+      final roomInfo = poker.currentInfo;
+      if (roomInfo == null) {
+        return RaisedButton(
+          onPressed: _showDialog,
+          child: Text("Connect to room"),
+        );
+      } else {
+        return Center(
+            child: Column(
+          children: [
+            ..._buildInfoWidget(roomInfo),
+            RaisedButton(
+              onPressed: _showDialog,
+              child: Text("Reconnect"),
+            )
+          ],
+        ));
+      }
+    });
   }
 
-  List<Text> _buildInfoWidget(String room) {
-    final poker = Provider.of<Poker>(context, listen: false);
-
+  List<Text> _buildInfoWidget(RoomInfo roomInfo) {
     return [
-      Text("You're connected to $room"),
-      Text("Current round is: ${poker.currentRound}")
+      Text("You're connected to ${roomInfo.name}"),
+      Text("Current round is: ${roomInfo.round}")
     ];
   }
 

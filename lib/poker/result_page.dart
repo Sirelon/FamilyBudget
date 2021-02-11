@@ -25,15 +25,7 @@ class _CardFullPageState extends State<CardFullPage> {
             number: widget.number,
             big: true,
           )
-        : Container(
-            width: double.infinity,
-            height: double.infinity,
-            color: Colors.deepOrangeAccent,
-            child: Center(
-                child: RipplesAnimation(
-              child: Container(),
-            )),
-          );
+        : WaitForResultWidget();
     final titleText = toReveal ? "Tap to close" : "Ready. Tap to view.";
     return Scaffold(
       appBar: AppBar(title: Text(titleText)),
@@ -52,6 +44,25 @@ class _CardFullPageState extends State<CardFullPage> {
             });
           }
         },
+      )),
+    );
+  }
+}
+
+class WaitForResultWidget extends StatelessWidget {
+  const WaitForResultWidget({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      color: Colors.deepOrangeAccent,
+      child: Center(
+          child: RipplesAnimation(
+        child: Text("Asdasdsa"),
       )),
     );
   }
