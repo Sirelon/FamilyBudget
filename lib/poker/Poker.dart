@@ -1,8 +1,13 @@
+import 'package:budget/poker/cards_list_page.dart';
+import 'package:budget/poker/cards_list_page.dart';
+import 'package:budget/poker/fibonnacci_card_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:io' show Platform;
+
+import 'cards_list_page.dart';
 
 class Poker extends ChangeNotifier {
   String _userName;
@@ -49,11 +54,36 @@ class Poker extends ChangeNotifier {
   }
 
   void prefilInfo() {
-    _roomCollection.doc("info").update({"round": 1});
+    _roomCollection.doc("info").set({"round": 1});
   }
 
   void readInfo(DocumentSnapshot event) {
     _currentRound = event.data()["round"];
     notifyListeners();
   }
+
+  void onCardChoosed(int index) {
+    final fibNumber = fibonacci(index);
+    // _roomCollection.doc("Round $_currentRound").get().then((value) => value.)
+    _roomCollection.doc("Round $_currentRound").update({
+      _userName: {"number": fibNumber, "lock": true}
+    });
+  }
+
+  void onCardReveal(int fibonacci) {
+    _roomCollection.doc("Round $_currentRound").update({
+      _userName: {"number": fibonacci, "lock": false}
+    });
+  }
+
+  void removeCard() {
+    _roomCollection.doc("Round $_currentRound").update({_userName: null});
+  }
+
+// void unlock() {
+//   _roomCollection.doc("Round $_currentRound").update({
+//     _userName: {"number": fibNumber, "lock": true}
+//   });
+// }
+
 }

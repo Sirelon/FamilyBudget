@@ -1,6 +1,7 @@
 import 'package:budget/poker/ripple_animation.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import 'Poker.dart';
 import 'fibonnacci_card_widget.dart';
 
 class CardFullPage extends StatefulWidget {
@@ -43,6 +44,9 @@ class _CardFullPageState extends State<CardFullPage> {
           if (toReveal) {
             Navigator.pop(context);
           } else {
+            Provider.of<Poker>(context, listen: false)
+                .onCardReveal(widget.number);
+
             setState(() {
               toReveal = true;
             });

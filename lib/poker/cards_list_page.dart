@@ -33,6 +33,8 @@ class CardsListPage extends StatelessWidget {
   Widget cardItem(BuildContext context, int index) {
     return InkWell(
       onTap: () {
+        Provider.of<Poker>(context, listen: false).onCardChoosed(index);
+
         Navigator.push(
             context,
             PageRouteBuilder(
@@ -119,8 +121,6 @@ class _ConnectButtonWidgetState extends State<ConnectButtonWidget> {
 
   _connectToRoom() {
     Navigator.pop(context);
-    setState(() {
-      Provider.of<Poker>(context, listen: false).connectToRoom(controller.text);
-    });
+    Provider.of<Poker>(context, listen: false).connectToRoom(controller.text);
   }
 }
