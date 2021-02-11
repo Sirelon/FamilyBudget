@@ -61,9 +61,20 @@ class WaitForResultWidget extends StatelessWidget {
       height: double.infinity,
       color: Colors.deepOrangeAccent,
       child: Center(
-          child: RipplesAnimation(
-        child: Text("Asdasdsa"),
+          child: Column(
+        children: [
+          RipplesAnimation(child: Container()),
+        ],
       )),
     );
+  }
+}
+
+class RoundResultsWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<Poker>(builder: (context, poker, child) {
+
+    });
   }
 }

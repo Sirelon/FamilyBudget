@@ -14,6 +14,33 @@ class RoomInfo {
   int round;
 
   RoomInfo(this.name, this.round);
+
+  String get roundDoc => "Round $round";
+}
+
+class RoundResult {
+  final int round;
+  List<UserResultHolder> users = [];
+
+  RoundResult(this.round);
+
+  bool get canReveal => users.every((element) => !element.lock);
+
+  double get result {
+    final sum = users
+        .map((e) => e.value)
+        .fold(0, (previous, current) => previous + current);
+
+    return sum / users.length;
+  }
+}
+
+class UserResultHolder {
+  final String userName;
+  final int value;
+  final bool lock;
+
+  UserResultHolder(this.userName, this.value, this.lock);
 }
 
 class Poker extends ChangeNotifier {
@@ -21,11 +48,7 @@ class Poker extends ChangeNotifier {
 
   CollectionReference _roomCollection;
 
-  var _currentRound = 1;
-
-  int get currentRound => _currentRound;
-
-  RoomInfo _info = null;
+  RoomInfo _info;
 
   RoomInfo get currentInfo => _info;
 
@@ -46,12 +69,13 @@ class Poker extends ChangeNotifier {
     // _roomCollection.doc(_userName).set({"connect": "on"});
     _roomCollection.doc("info").snapshots().listen((event) {
       print(event.exists);
+      var round = 1;
       if (event.exists) {
-        readInfo(event);
+        round = event.data()["round"];
       } else {
         prefilInfo();
       }
-      _info = RoomInfo(roomName, _currentRound);
+      _info = RoomInfo(roomName, round);
       notifyListeners();
     });
   }
@@ -68,27 +92,25 @@ class Poker extends ChangeNotifier {
     _roomCollection.doc("info").set({"round": 1});
   }
 
-  void readInfo(DocumentSnapshot event) {
-    _currentRound = event.data()["round"];
-  }
-
   void onCardChoosed(int index) {
     final fibNumber = fibonacci(index);
     // _roomCollection.doc("Round $_currentRound").get().then((value) => value.)
-    _roomCollection.doc("Round $_currentRound").update({
+    _currentRoundDoc().update({
       _userName: {"number": fibNumber, "lock": true}
     });
   }
 
   void onCardReveal(int fibonacci) {
-    _roomCollection.doc("Round $_currentRound").update({
+    _currentRoundDoc().update({
       _userName: {"number": fibonacci, "lock": false}
     });
   }
 
   void removeCard() {
-    _roomCollection.doc("Round $_currentRound").update({_userName: null});
+    _currentRoundDoc().update({_userName: null});
   }
+
+  DocumentReference _currentRoundDoc() => _roomCollection.doc(_info.roundDoc);
 
 // void unlock() {
 //   _roomCollection.doc("Round $_currentRound").update({
