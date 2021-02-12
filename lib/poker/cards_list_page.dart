@@ -82,8 +82,10 @@ class _ConnectButtonWidgetState extends State<ConnectButtonWidget> {
 
   List<Text> _buildInfoWidget(RoomInfo roomInfo) {
     return [
-      Text("You're connected to ${roomInfo.name}"),
-      Text("Current round is: ${roomInfo.round}")
+      Text("You're connected to ${roomInfo.name}",
+          style: Theme.of(context).textTheme.headline6),
+      Text("Current round is: ${roomInfo.round}",
+          style: Theme.of(context).textTheme.headline5)
     ];
   }
 

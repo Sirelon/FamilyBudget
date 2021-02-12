@@ -31,6 +31,8 @@ class RoundResult {
         .map((e) => e.value)
         .fold(0, (previous, current) => previous + current);
 
+    print(sum);
+
     return sum / users.length;
   }
 }
@@ -61,7 +63,9 @@ class Poker extends ChangeNotifier {
 
     Future<String> deviceId;
     if (Platform.isAndroid) {
-      deviceId = deviceInfo.androidInfo.then((value) => value.androidId);
+      // TODO:
+      // deviceId = deviceInfo.androidInfo.then((value) => value.androidId);
+      deviceId = deviceInfo.androidInfo.then((value) => value.model);
     } else {
       deviceId = deviceInfo.iosInfo.then((value) => value.identifierForVendor);
     }
@@ -90,6 +94,8 @@ class Poker extends ChangeNotifier {
   void connectToRound() {
     _currentRoundDoc().snapshots().listen((event) {
       final data = event.data();
+
+      if (data == null) return;
 
       final users =
           data.entries.where((element) => element.value != null).map((e) {
@@ -122,9 +128,10 @@ class Poker extends ChangeNotifier {
     }, SetOptions(merge: true));
   }
 
-  void onCardReveal(int fibonacci) {
+  void onCardReveal(int index) {
+    final fibNumber = fibonacci(index);
     _currentRoundDoc().update({
-      _userName: {"number": fibonacci, "lock": false}
+      _userName: {"number": fibNumber, "lock": false}
     });
   }
 
