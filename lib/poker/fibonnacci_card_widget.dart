@@ -16,7 +16,7 @@ class FibonacciCardWidget extends StatelessWidget {
     return Hero(
       tag: text,
       child: Card(
-        color: Colors.blueGrey,
+        color: Color(0x8001AD56),
         child: Center(
           child: Text(
             text,

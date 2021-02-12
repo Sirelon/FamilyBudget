@@ -31,11 +31,12 @@ class _BudgetAppState extends State<BudgetApp> with WidgetsBindingObserver {
       child: MaterialApp(
           title: 'Family Budget',
           theme: ThemeData(
-              primarySwatch: Colors.blue,
+              scaffoldBackgroundColor: Color(0xFF80979A),
+              primarySwatch: Colors.teal,
               visualDensity: VisualDensity.adaptivePlatformDensity,
               textTheme: textTheme),
           home: FutureBuilder(
-              // Initialize FlutterFire:
+            // Initialize FlutterFire:
               future: _initialization,
               builder: (context, snapshot) {
                 // Check for errors

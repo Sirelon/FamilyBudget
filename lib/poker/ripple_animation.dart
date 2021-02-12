@@ -5,18 +5,26 @@ import 'package:flutter/animation.dart';
 import 'CurveWave.dart';
 
 class RipplesAnimation extends StatefulWidget {
-  const RipplesAnimation({Key key, this.size = 80.0, this.color = Colors.red,
-    this.onPressed, @required this.child,}) : super(key: key);
+  const RipplesAnimation({
+    Key key,
+    this.size = 80.0,
+    this.color = Colors.tealAccent,
+    this.onPressed,
+    @required this.child,
+  }) : super(key: key);
   final double size;
   final Color color;
   final Widget child;
   final VoidCallback onPressed;
+
   @override
   _RipplesAnimationState createState() => _RipplesAnimationState();
 }
 
-class _RipplesAnimationState extends State<RipplesAnimation> with TickerProviderStateMixin {
+class _RipplesAnimationState extends State<RipplesAnimation>
+    with TickerProviderStateMixin {
   AnimationController _controller;
+
   @override
   void initState() {
     super.initState();
@@ -25,11 +33,13 @@ class _RipplesAnimationState extends State<RipplesAnimation> with TickerProvider
       vsync: this,
     )..repeat();
   }
+
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
+
   Widget _button() {
     return Center(
       child: ClipRRect(
@@ -50,8 +60,11 @@ class _RipplesAnimationState extends State<RipplesAnimation> with TickerProvider
                   curve: const CurveWave(),
                 ),
               ),
-              child: Icon(Icons.lock_open, size: 40,)
-          ),
+              child: Icon(
+                Icons.lock_open,
+                size: 40,
+                color: Colors.deepPurple,
+              )),
         ),
       ),
     );

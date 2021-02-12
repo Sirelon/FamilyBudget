@@ -45,7 +45,6 @@ class _CardFullPageState extends State<CardFullPage> {
             poker.goToNextRound(poker.currentInfo.round);
             Navigator.pop(context);
           } else {
-
             poker.onCardReveal(widget.number);
 
             setState(() {
@@ -68,7 +67,7 @@ class WaitForResultWidget extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: double.infinity,
-      color: Colors.deepOrangeAccent,
+      color: Colors.teal,
       child: Center(
           child: Column(
         children: [
@@ -92,8 +91,13 @@ class RoundResultsWidget extends StatelessWidget {
       if (data.canReveal) {
         title = "RESULT IS ${data.result}";
       }
-      return Column(children: [
-        Text(title, style: TextStyle(fontSize: 18)),
+      return Column(
+          children: [
+        Text(title,
+            style: Theme.of(context)
+                .textTheme
+                .headline6
+                .copyWith(color: Colors.white)),
         ...usersInfo,
       ]);
     });
@@ -110,10 +114,11 @@ class RoundResultsWidget extends StatelessWidget {
       child: Row(children: [
         Text(
           user.userName,
-          style: TextStyle(fontSize: 14),
+          style: TextStyle(color: Colors.deepPurple, fontSize: 18),
         ),
         SizedBox(width: 16),
-        Text(valueTxt, style: TextStyle(color: Colors.cyan))
+        Text(valueTxt,
+            style: TextStyle(color: Colors.deepPurpleAccent, fontSize: 18))
       ]),
     );
   }
