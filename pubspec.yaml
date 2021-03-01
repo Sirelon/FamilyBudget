@@ -27,16 +27,21 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.0
-  firebase_core: ^0.7.0
-  cloud_firestore: ^0.16.0+1
-  image_picker: ^0.6.7+21
-  firebase_storage: ^7.0.0
-  path: ^1.7.0
-  intl: ^0.16.1
+  cupertino_icons: ^1.0.2
+  firebase_core: ^1.0.0
+  cloud_firestore: ^1.0.0
+  image_picker: ^0.7.0
+  firebase_storage: ^8.0.0
+  path: ^1.8.0
+  intl: ^0.17.0
   cached_network_image: ^2.5.0
   provider: ^4.3.3
-  device_info: ^1.0.0
+  device_info: ^2.0.0
+
+dependency_overrides:
+  # This need only for cached_network_image version: 2.5.0, after updated that lib, I guess you can remove it all.
+  http: ^0.13.0
+  plugin_platform_interface: ^2.0.0
 
 
 dev_dependencies:

@@ -1,7 +1,6 @@
 import 'package:budget/poker/Poker.dart';
 import 'package:budget/poker/fibonnacci_card_widget.dart';
 import 'package:budget/poker/result_page.dart';
-import 'package:budget/poker/ripple_animation.dart';
 import 'package:budget/ui_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -61,7 +60,7 @@ class _ConnectButtonWidgetState extends State<ConnectButtonWidget> {
     return Consumer<Poker>(builder: (context, poker, child) {
       final roomInfo = poker.currentInfo;
       if (roomInfo == null) {
-        return RaisedButton(
+        return ElevatedButton(
           onPressed: _showDialog,
           child: Text("Connect to room"),
         );
@@ -70,7 +69,7 @@ class _ConnectButtonWidgetState extends State<ConnectButtonWidget> {
             child: Column(
           children: [
             ..._buildInfoWidget(roomInfo),
-            RaisedButton(
+            ElevatedButton(
               onPressed: _showDialog,
               child: Text("Reconnect"),
             )
@@ -92,7 +91,7 @@ class _ConnectButtonWidgetState extends State<ConnectButtonWidget> {
   _showDialog() async {
     await showDialog<String>(
       context: context,
-      child: new SystemPadding(
+      builder: (c) => new SystemPadding(
         child: new AlertDialog(
           contentPadding: const EdgeInsets.all(16.0),
           content: new Row(
@@ -108,12 +107,12 @@ class _ConnectButtonWidgetState extends State<ConnectButtonWidget> {
             ],
           ),
           actions: <Widget>[
-            new FlatButton(
+            new TextButton(
                 child: const Text('CANCEL'),
                 onPressed: () {
                   Navigator.pop(context);
                 }),
-            new FlatButton(
+            new TextButton(
                 child: const Text('Connect'), onPressed: _connectToRoom)
           ],
         ),

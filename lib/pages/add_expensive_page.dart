@@ -19,8 +19,6 @@ class AddExpensivePage extends StatefulWidget {
 class _AddExpensivePageState extends State<AddExpensivePage> {
   String selectedCategory;
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
   List<String> categories;
 
   final descriptionController = TextEditingController();
@@ -85,7 +83,6 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
     }
 
     return Scaffold(
-        key: _scaffoldKey,
         appBar: AppBar(title: const Text("Добавление трат")),
         body: SafeArea(
           child: Padding(
@@ -119,8 +116,8 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
                           keyboardType: TextInputType.multiline,
                           minLines: 2,
                           maxLines: 12),
-                      OutlineButton(child: Text("Фото?"), onPressed: addPhoto),
-                      OutlineButton(
+                      OutlinedButton(child: Text("Фото?"), onPressed: addPhoto),
+                      OutlinedButton(
                           child: Text(dateFormat.format(date)),
                           onPressed: () => showDate(context)),
                       _image == null
@@ -182,10 +179,8 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
   }
 
   void showSnackBar(String errorMsg) {
-    _scaffoldKey.currentState.showSnackBar(SnackBar(
-      content: Text(errorMsg),
-      duration: Duration(seconds: 1),
-    ));
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(errorMsg), duration: Duration(seconds: 1)));
   }
 
   void cancel() {

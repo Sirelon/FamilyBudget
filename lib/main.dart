@@ -1,9 +1,6 @@
-import 'package:budget/network.dart';
 import 'package:budget/pages/add_expensive_page.dart';
-import 'package:budget/pages/expenses_info_page.dart';
 import 'package:budget/pages/main_page.dart';
 import 'package:budget/poker/Poker.dart';
-import 'package:budget/poker/cards_list_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -31,8 +28,8 @@ class _BudgetAppState extends State<BudgetApp> with WidgetsBindingObserver {
       child: MaterialApp(
           title: 'Family Budget',
           theme: ThemeData(
-              scaffoldBackgroundColor: Color(0xFF80979A),
-              primarySwatch: Colors.teal,
+              // scaffoldBackgroundColor: Color(0xFF80979A),
+              // primarySwatch: Colors.teal,
               visualDensity: VisualDensity.adaptivePlatformDensity,
               textTheme: textTheme),
           home: FutureBuilder(
@@ -46,8 +43,8 @@ class _BudgetAppState extends State<BudgetApp> with WidgetsBindingObserver {
 
                 // Once complete, show your application
                 if (snapshot.connectionState == ConnectionState.done) {
-                  // return BudgetMainPage();
-                  return CardsListPage();
+                  return BudgetMainPage();
+                  // return CardsListPage();
                 }
 
                 // Otherwise, show something whilst waiting for initialization to complete
@@ -70,7 +67,7 @@ class _BudgetAppState extends State<BudgetApp> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    var resumed = state == AppLifecycleState.resumed;
+    // var resumed = state == AppLifecycleState.resumed;
     // TODO: I'm not ready to handle app state yet.
     // Provider.of<Poker>(context, listen: false)
     //     .connectionChanged(resumed);

@@ -1,13 +1,8 @@
-import 'package:budget/poker/cards_list_page.dart';
-import 'package:budget/poker/cards_list_page.dart';
 import 'package:budget/poker/fibonnacci_card_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:io' show Platform;
-
-import 'cards_list_page.dart';
 
 class RoomInfo {
   String name;
