@@ -18,7 +18,8 @@ class DataManager {
   DataManager._internal();
 
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
-  final currentMonth = FirebaseFirestore.instance.collection("february");
+  final currentMonth = FirebaseFirestore.instance.collection("march");
+  // final currentMonth = FirebaseFirestore.instance.collection("february");
   // final currentMonth = FirebaseFirestore.instance.collection("january");
 
   Future<String> saveImage(File image) async {

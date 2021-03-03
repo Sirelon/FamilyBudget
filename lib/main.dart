@@ -6,6 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'network.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(BudgetApp());
