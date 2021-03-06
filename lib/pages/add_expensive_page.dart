@@ -117,6 +117,7 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
                           minLines: 2,
                           maxLines: 12),
                       OutlinedButton(child: Text("Фото?"), onPressed: addPhoto),
+                      OutlinedButton(child: Text("Галерея"), onPressed: pickPhoto),
                       OutlinedButton(
                           child: Text(dateFormat.format(date)),
                           onPressed: () => showDate(context)),
@@ -189,6 +190,18 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
 
   void addPhoto() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
+  void pickPhoto() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
     setState(() {
       if (pickedFile != null) {
