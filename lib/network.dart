@@ -40,14 +40,14 @@ class DataManager {
     final currentCategory = currentMonth.doc(expenses.category);
     currentCategory.collection("expenses").doc().set(data);
     final currentDoc = await currentCategory.get();
-    final expensiveTotal = currentDoc.data()['expensesTotal'] + expenses.total;
+    final expensiveTotal = currentDoc.data()?['expensesTotal'] + expenses.total;
     currentCategory.update({'expensesTotal': expensiveTotal});
   }
 
   void import() async {
     var data = await firestore.collection("preset").get();
     data.docs.forEach((element) {
-      var data = element.data();
+      var data = element.data()!;
       data.putIfAbsent("expensesTotal", () => 0);
       var doc = currentMonth.doc(element.id);
       doc.collection("expenses");
@@ -57,14 +57,14 @@ class DataManager {
 
   Future<List<String>> getCategories() {
     return currentMonth.get().then((value) =>
-        value.docs.map((e) => e.data()["title"].toString()).toList());
+        value.docs.map((e) => e.data()!["title"].toString()).toList());
   }
 
   Future<String> getIdByTitle(String title) {
     return currentMonth
         .get()
         .then((value) => value.docs
-            .firstWhere((element) => element.data()['title'] == title))
+            .firstWhere((element) => element.data()?['title'] == title))
         .then((value) => value.id);
   }
 
@@ -76,15 +76,15 @@ class DataManager {
         .get()
         .then((value) => value.docs.map((e) {
               final data = e.data();
-              Timestamp timestamp = data["date"];
+              Timestamp timestamp = data?["date"];
 
-              List<dynamic> images = data["images"];
+              List<dynamic> images = data?["images"];
               return Expenses(
-                  data["price"],
+                  data?["price"],
                   category,
                   DateTime.fromMillisecondsSinceEpoch(
                       timestamp.millisecondsSinceEpoch),
-                  data["description"],
+                  data?["description"],
                   images.map((e) => e.toString()).toList());
             }).toList());
   }

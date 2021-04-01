@@ -7,7 +7,7 @@ import 'fibonnacci_card_widget.dart';
 class CardFullPage extends StatefulWidget {
   final int number;
 
-  const CardFullPage({Key key, this.number}) : super(key: key);
+  const CardFullPage({Key? key, required this.number}) : super(key: key);
 
   @override
   _CardFullPageState createState() => _CardFullPageState();
@@ -58,9 +58,7 @@ class _CardFullPageState extends State<CardFullPage> {
 }
 
 class WaitForResultWidget extends StatelessWidget {
-  const WaitForResultWidget({
-    Key key,
-  }) : super(key: key);
+  const WaitForResultWidget({Key? key,}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -91,12 +89,11 @@ class RoundResultsWidget extends StatelessWidget {
       if (data.canReveal) {
         title = "RESULT IS ${data.result}";
       }
-      return Column(
-          children: [
+      return Column(children: [
         Text(title,
             style: Theme.of(context)
                 .textTheme
-                .headline6
+                .headline6!
                 .copyWith(color: Colors.white)),
         ...usersInfo,
       ]);

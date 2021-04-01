@@ -24,7 +24,7 @@ class RoundResult {
   double get result {
     final sum = users
         .map((e) => e.value)
-        .fold(0, (previous, current) => previous + current);
+        .fold(0, (int previous, current) => previous + current);
 
     print(sum);
 
@@ -41,15 +41,15 @@ class UserResultHolder {
 }
 
 class Poker extends ChangeNotifier {
-  String _userName;
+  late String _userName;
 
-  CollectionReference _roomCollection;
+  late CollectionReference _roomCollection;
 
-  RoomInfo _info;
+  late RoomInfo _info;
 
   RoomInfo get currentInfo => _info;
 
-  RoundResult _roundResult;
+  late RoundResult _roundResult;
 
   RoundResult get roundResult => _roundResult;
 
@@ -74,7 +74,7 @@ class Poker extends ChangeNotifier {
       print(event.exists);
       var round = 1;
       if (event.exists) {
-        round = event.data()["round"];
+        round = event.data()!["round"];
       } else {
         prefilInfo();
       }

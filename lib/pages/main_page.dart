@@ -55,13 +55,13 @@ class BudgetTable extends StatelessWidget {
                 tableCellHeader("Остаток")
               ],
             ),
-            for (var item in snapshot.data.docs)
+            for (var item in snapshot.data!.docs)
               TableRow(children: [
-                tableCellClickable(item.data()['title'], true,
-                    () => showExpensesInfo(context, item.data()['title'])),
-                tableCell(item.data()['limit'].toString()),
-                tableCellClickable(item.data()['expensesTotal'].toString(),
-                    false, () => openAddExpense(context, item.data()['title'])),
+                tableCellClickable(item.data()!['title'], true,
+                    () => showExpensesInfo(context, item.data()!['title'])),
+                tableCell(item.data()!['limit'].toString()),
+                tableCellClickable(item.data()!['expensesTotal'].toString(),
+                    false, () => openAddExpense(context, item.data()!['title'])),
                 balanceCell(item),
               ]),
             totalRow(snapshot)
@@ -74,9 +74,9 @@ class BudgetTable extends StatelessWidget {
   TableRow totalRow(AsyncSnapshot<QuerySnapshot> snapshot) {
     var limit = 0;
     var expensesTotal = 0;
-    for (var item in snapshot.data.docs) {
-      limit += item.data()['limit'];
-      expensesTotal += item.data()['expensesTotal'];
+    for (var item in snapshot.data!.docs) {
+      limit += item.data()!['limit'] as int;
+      expensesTotal += item.data()!['expensesTotal']  as int;
     }
 
     final limitTotal = limit - expensesTotal;
@@ -93,8 +93,8 @@ class BudgetTable extends StatelessWidget {
   }
 
   Widget balanceCell(QueryDocumentSnapshot item) {
-    var limit = item.data()['limit'];
-    var expensesTotal = item.data()['expensesTotal'];
+    int limit = item.data()!['limit'];
+    var expensesTotal = item.data()!['expensesTotal'];
     var data = limit - expensesTotal;
     var style = TextStyle(color: data > 0 ? Colors.green : Colors.red);
     return tableCellStyled(data.toString(), style);

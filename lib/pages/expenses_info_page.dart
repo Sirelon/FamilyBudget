@@ -17,7 +17,7 @@ class ExpensesInfoPage extends StatefulWidget {
 }
 
 class _ExpensesInfoPageState extends State<ExpensesInfoPage> {
-  Future<List<Expenses>> expensesFuture;
+  late Future<List<Expenses>> expensesFuture;
 
   @override
   void initState() {
@@ -35,7 +35,7 @@ class _ExpensesInfoPageState extends State<ExpensesInfoPage> {
 
     Widget body = FutureBuilder(
         future: expensesFuture,
-        builder: (context, snapshot) {
+        builder: (context, AsyncSnapshot<List<Expenses>> snapshot) {
           // Check for errors
           if (snapshot.hasError) {
             return Text("ERROR ${snapshot.error}");
@@ -43,7 +43,7 @@ class _ExpensesInfoPageState extends State<ExpensesInfoPage> {
 
           // Once complete, show your application
           if (snapshot.connectionState == ConnectionState.done) {
-            final list = snapshot.data;
+            var list = snapshot.requireData;
             return ListView.builder(
                 itemCount: list.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -108,7 +108,10 @@ class ExpensesInfoItem extends StatelessWidget {
               ),
             ),
             image != null
-                ? Expanded(child: _buildImageWidget(image, context), flex: 1,)
+                ? Expanded(
+                    child: _buildImageWidget(image, context),
+                    flex: 1,
+                  )
                 : SizedBox.shrink()
           ],
         ),

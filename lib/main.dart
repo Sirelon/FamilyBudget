@@ -58,12 +58,12 @@ class _BudgetAppState extends State<BudgetApp> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    // WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    // WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -77,9 +77,9 @@ class _BudgetAppState extends State<BudgetApp> with WidgetsBindingObserver {
 }
 
 class AddExpensiveFAB extends StatelessWidget {
-  final String category;
+  final String? category;
 
-  const AddExpensiveFAB({Key key, this.category}) : super(key: key);
+  const AddExpensiveFAB({Key? key, this.category}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

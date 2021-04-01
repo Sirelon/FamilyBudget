@@ -8,7 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 class AddExpensivePage extends StatefulWidget {
-  final String category;
+  final String? category;
 
   AddExpensivePage(this.category);
 
@@ -17,15 +17,15 @@ class AddExpensivePage extends StatefulWidget {
 }
 
 class _AddExpensivePageState extends State<AddExpensivePage> {
-  String selectedCategory;
+  String? selectedCategory;
 
-  List<String> categories;
+  List<String>? categories;
 
   final descriptionController = TextEditingController();
   final costController = TextEditingController();
   bool _costNotValid = false;
-  FocusNode _costFocus;
-  File _image;
+  late FocusNode _costFocus;
+  File? _image;
   final picker = ImagePicker();
 
   var date = DateTime.now();
@@ -68,12 +68,12 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
           height: 2,
           color: Theme.of(context).accentColor,
         ),
-        onChanged: (String newValue) {
+        onChanged: (String? newValue) {
           setState(() {
             selectedCategory = newValue;
           });
         },
-        items: categories.map<DropdownMenuItem<String>>((String value) {
+        items: categories?.map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,
             child: Text(value),
@@ -117,13 +117,14 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
                           minLines: 2,
                           maxLines: 12),
                       OutlinedButton(child: Text("Фото?"), onPressed: addPhoto),
-                      OutlinedButton(child: Text("Галерея"), onPressed: pickPhoto),
+                      OutlinedButton(
+                          child: Text("Галерея"), onPressed: pickPhoto),
                       OutlinedButton(
                           child: Text(dateFormat.format(date)),
                           onPressed: () => showDate(context)),
                       _image == null
                           ? SizedBox.shrink()
-                          : Image.file(_image, height: 200),
+                          : Image.file(_image!, height: 200),
                     ],
                   ),
                 ),
@@ -163,11 +164,11 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
     final description = descriptionController.value.text;
     try {
       var dataManager = DataManager.instance;
-      final id = await dataManager.getIdByTitle(selectedCategory);
+      final id = await dataManager.getIdByTitle(selectedCategory!);
 
       List<String> images = [];
       if (_image != null) {
-        final image = await dataManager.saveImage(_image);
+        final image = await dataManager.saveImage(_image!);
         images.add(image);
       }
       dataManager.addExpenses(Expenses(total, id, date, description, images));
@@ -213,10 +214,11 @@ class _AddExpensivePageState extends State<AddExpensivePage> {
   }
 
   void showDate(BuildContext context) async {
-    date = await showDatePicker(
+    var dateArg = await showDatePicker(
         context: context,
         initialDate: date,
         firstDate: DateTime(2021),
         lastDate: DateTime.now());
+    if (dateArg != null) date = dateArg;
   }
 }
